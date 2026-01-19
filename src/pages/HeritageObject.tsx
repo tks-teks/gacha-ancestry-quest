@@ -75,6 +75,13 @@ const HeritageObject = () => {
         <AncestorChat
           ancestorName={object.ancestorName}
           greeting={object.ancestorGreeting}
+          objectContext={{
+            title: object.title,
+            subtitle: object.subtitle,
+            description: object.description,
+            audioText: object.audioText,
+            ancestorName: object.ancestorName,
+          }}
         />
       </div>
     </div>
