@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { QrCode, Compass, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QRScanner } from "@/components/QRScanner";
 import { heritageObjects } from "@/data/heritageObjects";
+import { toast } from "sonner";
 import heroImage from "@/assets/hero-fondation.jpg";
 import masqueImage from "@/assets/masque-ancestral.jpg";
 import poterieImage from "@/assets/poterie-traditionnelle.jpg";
@@ -13,15 +16,41 @@ const imageMap: Record<string, string> = {
 
 const Index = () => {
   const navigate = useNavigate();
+  const [showScanner, setShowScanner] = useState(false);
 
-  const handleScanQR = () => {
-    // In production, this would open a QR scanner
-    // For demo, we'll show a toast or navigate to first object
-    alert("Scanner QR Code - Cette fonctionnalité sera bientôt disponible !");
+  const handleScanResult = (result: string) => {
+    setShowScanner(false);
+    
+    // Check if the result is a full URL or just an ID
+    let objectId = result;
+    
+    // Handle full URLs like https://domain.com/objet/masque-ancestral
+    if (result.includes("/objet/")) {
+      const parts = result.split("/objet/");
+      objectId = parts[parts.length - 1].replace(/\/$/, ""); // Remove trailing slash
+    }
+    
+    // Check if the object exists
+    const object = heritageObjects.find(obj => obj.id === objectId);
+    
+    if (object) {
+      toast.success(`Objet trouvé: ${object.title}`);
+      navigate(`/objet/${objectId}`);
+    } else {
+      toast.error("QR code non reconnu. Essayez un autre code.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-background">
+      {/* QR Scanner Modal */}
+      {showScanner && (
+        <QRScanner 
+          onScan={handleScanResult}
+          onClose={() => setShowScanner(false)}
+        />
+      )}
+
       {/* Hero Section */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -70,7 +99,7 @@ const Index = () => {
             variant="scanner"
             size="xl"
             className="w-full"
-            onClick={handleScanQR}
+            onClick={() => setShowScanner(true)}
           >
             <QrCode className="w-6 h-6 mr-2" />
             Scanner un QR Code
