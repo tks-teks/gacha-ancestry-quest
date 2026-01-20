@@ -11,11 +11,13 @@ import { getHeritageObject } from "@/data/heritageObjects";
 import tissuNdopImage from "@/assets/tissu-ndop.jpg";
 import perlageRoyalImage from "@/assets/perlage-royal.jpg";
 import masqueBamilekeImage from "@/assets/masque-bamileke.jpg";
+import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
 
 const imageMap: Record<string, string> = {
   "tissu-ndop": tissuNdopImage,
   "perlage-royal": perlageRoyalImage,
   "masque-bamileke": masqueBamilekeImage,
+  "case-obus-mousgoum": caseObusMousgoumImage,
 };
 
 const HeritageObject = () => {

@@ -47,6 +47,18 @@ export const heritageObjects: HeritageObject[] = [
     ancestorGreeting: "Je suis l'Esprit du Masque Bamiléké, gardien des cérémonies sacrées. Pose-moi tes questions sur les rites et traditions des Grassfields.",
     // Modèle 3D de masque/sculpture - démo avec un modèle de casque
     model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+  },
+  {
+    id: "case-obus-mousgoum",
+    title: "Case Obus Mousgoum",
+    subtitle: "Architecture traditionnelle, Extrême-Nord Cameroun",
+    description: "Les cases obus Mousgoum sont des chefs-d'œuvre architecturaux uniques au monde, érigées par le peuple Mousgoum dans la région de l'Extrême-Nord du Cameroun. Ces structures en terre crue, pouvant atteindre 9 mètres de hauteur, sont construites sans aucun échafaudage grâce à une technique ancestrale remarquable. Leur forme ogivale et leurs nervures en relief ne sont pas seulement esthétiques : elles servent de marches pour l'entretien et de canaux d'évacuation des eaux de pluie. La Fondation Jean-Félicien Gacha a reconstruit ces cases au sein du Centre des Cultures JLD pour préserver ce patrimoine architectural exceptionnel inscrit au patrimoine mondial de l'humanité.",
+    audioText: "Je suis la Case Obus, née des mains habiles du peuple Mousgoum dans les plaines de l'Extrême-Nord. Sans bois, sans clou, sans échafaudage — uniquement la terre de nos ancêtres façonnée avec sagesse. Mes nervures qui dessinent ma peau ne sont pas là pour décorer : elles sont les marches qui permettent à mes bâtisseurs de monter toujours plus haut, et les sillons qui guident la pluie vers le sol. Ma forme parfaite résiste aux vents du Sahel et garde mes habitants au frais sous le soleil ardent. Au Centre des Cultures JLD de Bangoulap, je me dresse fièrement pour témoigner du génie de nos ancêtres.",
+    image: "case-obus-mousgoum",
+    ancestorName: "Esprit de la Case Obus",
+    ancestorGreeting: "Je suis l'Esprit de la Case Obus Mousgoum, gardien des secrets de l'architecture de terre. Interroge-moi sur les techniques de construction ancestrales et la vie dans les plaines du Nord.",
+    // Modèle 3D d'architecture - démo avec un modèle de maison
+    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb"
   }
 ];
 
