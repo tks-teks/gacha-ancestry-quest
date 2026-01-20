@@ -6,12 +6,14 @@ import { QRScanner } from "@/components/QRScanner";
 import { heritageObjects } from "@/data/heritageObjects";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-fondation.jpg";
-import masqueImage from "@/assets/masque-ancestral.jpg";
-import poterieImage from "@/assets/poterie-traditionnelle.jpg";
+import tissuNdopImage from "@/assets/tissu-ndop.jpg";
+import perlageRoyalImage from "@/assets/perlage-royal.jpg";
+import masqueBamilekeImage from "@/assets/masque-bamileke.jpg";
 
 const imageMap: Record<string, string> = {
-  "masque-ancestral": masqueImage,
-  "poterie-traditionnelle": poterieImage,
+  "tissu-ndop": tissuNdopImage,
+  "perlage-royal": perlageRoyalImage,
+  "masque-bamileke": masqueBamilekeImage,
 };
 
 const Index = () => {
@@ -55,18 +57,18 @@ const Index = () => {
       <div className="relative h-[50vh] overflow-hidden">
         <img
           src={heroImage}
-          alt="Fondation Gacha"
+          alt="Fondation Jean-Félicien Gacha - Bangoulap"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-background" />
         
         {/* Logo/Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2">
-            Fondation Gacha
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2">
+            Fondation Jean-Félicien Gacha
           </h1>
-          <p className="text-lg text-primary-foreground/90 drop-shadow-md">
-            Gardiens du patrimoine
+          <p className="text-base text-primary-foreground/90 drop-shadow-md">
+            Bangoulap, Grassfields - Cameroun
           </p>
         </div>
       </div>
@@ -83,15 +85,15 @@ const Index = () => {
                 Bienvenue, explorateur
               </h2>
               <p className="text-sm text-muted-foreground">
-                Découvrez notre patrimoine
+                Centre des Cultures JLD
               </p>
             </div>
           </div>
           
           <p className="text-foreground mb-6 leading-relaxed">
-            Plongez dans l'histoire vivante de notre héritage culturel. 
-            Scannez les QR codes près des objets pour découvrir leurs secrets 
-            et dialoguer avec les esprits ancestraux.
+            Créée en 2002 par Ly Dumas pour honorer la mémoire de son père Jean-Félicien Gacha (1922-1972), 
+            la Fondation préserve et transmet le patrimoine culturel des Grassfields. 
+            Scannez les QR codes pour dialoguer avec les esprits ancestraux.
           </p>
           
           {/* QR Scanner Button */}
@@ -111,7 +113,7 @@ const Index = () => {
       <div className="px-4 pb-8">
         <h3 className="text-lg font-serif font-bold text-foreground mb-4 flex items-center gap-2">
           <span className="w-1 h-6 bg-primary rounded-full" />
-          Explorer la collection
+          Collection Ly et Frédéric Dumas
         </h3>
         
         <div className="space-y-4">
@@ -146,10 +148,10 @@ const Index = () => {
       <div className="px-4 pb-8">
         <div className="text-center py-6 border-t border-border">
           <p className="text-sm text-muted-foreground">
-            © 2025 Fondation Gacha
+            © 2025 Fondation Jean-Félicien Gacha
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            Préserver le passé, inspirer l'avenir
+            Susciter des vocations, développer les talents, transmettre les savoirs
           </p>
         </div>
       </div>
