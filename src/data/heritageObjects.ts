@@ -20,7 +20,9 @@ export const heritageObjects: HeritageObject[] = [
     audioText: "Je suis le Ndop, tissu des rois et gardien des traditions. Mes fils indigo portent les secrets des cours royales de l'Ouest Cameroun. Chaque motif blanc que tu vois est né de mains patientes qui ont noué et dénoué les fils selon des rituels transmis de génération en génération. Dans les Grassfields, j'habille les chefs lors des cérémonies, je drape les trônes et j'accompagne les grands moments de la vie. Mon bleu profond évoque le ciel nocturne sous lequel nos ancêtres ont tissé leurs premiers rêves.",
     image: "tissu-ndop",
     ancestorName: "Esprit du Ndop",
-    ancestorGreeting: "Je suis l'Esprit du Ndop, gardien des traditions textiles royales. Interroge-moi sur l'art du tissage et les cérémonies des cours Bamiléké."
+    ancestorGreeting: "Je suis l'Esprit du Ndop, gardien des traditions textiles royales. Interroge-moi sur l'art du tissage et les cérémonies des cours Bamiléké.",
+    // Modèle 3D de tissu/textile - démo avec un modèle de coussin texturé
+    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/MaterialsVariantsShoe/glTF-Binary/MaterialsVariantsShoe.glb"
   },
   {
     id: "perlage-royal",
@@ -30,7 +32,9 @@ export const heritageObjects: HeritageObject[] = [
     audioText: "Perle après perle, couleur après couleur, je suis née des mains habiles de nos artisans. Chaque perle que tu vois a été choisie et placée avec intention — le rouge pour la force, le bleu pour la sagesse, le jaune pour la prospérité. Dans les royaumes Bamiléké, seuls les chefs et les notables pouvaient posséder des objets perlés. Je suis un symbole de prestige, un témoignage vivant du raffinement de notre culture. Au Centre des Cultures JLD, les jeunes apprentis perpétuent cet art millénaire.",
     image: "perlage-royal",
     ancestorName: "Esprit du Perlage",
-    ancestorGreeting: "Je suis l'Esprit du Perlage, gardienne de l'art des perles royales. Demande-moi les secrets des motifs et des couleurs sacrées."
+    ancestorGreeting: "Je suis l'Esprit du Perlage, gardienne de l'art des perles royales. Demande-moi les secrets des motifs et des couleurs sacrées.",
+    // Modèle 3D décoratif - démo avec un modèle ornemental
+    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb"
   },
   {
     id: "masque-bamileke",
@@ -40,7 +44,9 @@ export const heritageObjects: HeritageObject[] = [
     audioText: "Je suis le souffle des ancêtres sculpté dans le bois. Quand un initié me porte, il devient le pont entre le monde visible et le monde invisible. Mes traits racontent l'histoire de notre peuple — les victoires, les épreuves, les espoirs. Dans les cases royales de Bangoulap, j'ai dansé au rythme des tambours lors des grandes cérémonies. Chaque entaille de mon visage est une prière, chaque courbe est une bénédiction. Les sculpteurs qui m'ont créé ont jeûné et prié avant de toucher le bois sacré.",
     image: "masque-bamileke",
     ancestorName: "Esprit du Masque",
-    ancestorGreeting: "Je suis l'Esprit du Masque Bamiléké, gardien des cérémonies sacrées. Pose-moi tes questions sur les rites et traditions des Grassfields."
+    ancestorGreeting: "Je suis l'Esprit du Masque Bamiléké, gardien des cérémonies sacrées. Pose-moi tes questions sur les rites et traditions des Grassfields.",
+    // Modèle 3D de masque/sculpture - démo avec un modèle de casque
+    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
   }
 ];
 
