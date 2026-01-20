@@ -15,17 +15,33 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     // Prevent "Invalid hook call" by forcing a single React instance.
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "react-dom/client",
+      "react-dom/server",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+    ],
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
       "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      "react-dom/client": path.resolve(__dirname, "./node_modules/react-dom/client"),
+      "react-dom/server": path.resolve(__dirname, "./node_modules/react-dom/server"),
       "react/jsx-runtime": path.resolve(__dirname, "./node_modules/react/jsx-runtime"),
       "react/jsx-dev-runtime": path.resolve(__dirname, "./node_modules/react/jsx-dev-runtime"),
       "@": path.resolve(__dirname, "./src"),
     },
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+    include: [
+      "react",
+      "react-dom",
+      "react-dom/client",
+      "react-dom/server",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+    ],
     force: true,
   },
 }));
