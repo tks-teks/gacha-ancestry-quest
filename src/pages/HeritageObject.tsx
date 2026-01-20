@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { getHeritageObject } from "@/data/heritageObjects";
-import masqueImage from "@/assets/masque-ancestral.jpg";
-import poterieImage from "@/assets/poterie-traditionnelle.jpg";
+import tissuNdopImage from "@/assets/tissu-ndop.jpg";
+import perlageRoyalImage from "@/assets/perlage-royal.jpg";
+import masqueBamilekeImage from "@/assets/masque-bamileke.jpg";
 
 const imageMap: Record<string, string> = {
-  "masque-ancestral": masqueImage,
-  "poterie-traditionnelle": poterieImage,
+  "tissu-ndop": tissuNdopImage,
+  "perlage-royal": perlageRoyalImage,
+  "masque-bamileke": masqueBamilekeImage,
 };
 
 const HeritageObject = () => {
