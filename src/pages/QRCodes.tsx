@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, Download, Printer } from "lucide-react";
+import { Download, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
 
 const QRCodes = () => {
@@ -34,24 +34,18 @@ const QRCodes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header - hidden when printing */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border print:hidden">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <h1 className="text-lg font-semibold text-foreground">QR Codes</h1>
-          </div>
-          <Button onClick={handlePrint} variant="outline" size="sm">
-            <Printer className="h-4 w-4 mr-2" />
-            Imprimer tout
-          </Button>
+    <Layout>
+      {/* Page Header */}
+      <div className="bg-primary text-primary-foreground px-4 py-6 flex items-center justify-between print:hidden">
+        <div>
+          <h1 className="text-xl font-serif font-bold">QR Codes</h1>
+          <p className="text-sm text-primary-foreground/80">Collection Ly et Frédéric Dumas</p>
         </div>
-      </header>
+        <Button onClick={handlePrint} variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary-foreground/20">
+          <Printer className="h-4 w-4 mr-2" />
+          Imprimer
+        </Button>
+      </div>
 
       {/* Print header */}
       <div className="hidden print:block text-center py-6 border-b">
@@ -60,22 +54,26 @@ const QRCodes = () => {
       </div>
 
       {/* QR Codes Grid */}
-      <section className="container mx-auto px-4 py-6">
-        <p className="text-sm text-muted-foreground mb-6 print:hidden">
+      <section className="px-4 py-6">
+        <p className="text-sm text-muted-foreground mb-6 print:hidden animate-fade-in">
           Imprimez ces QR codes et placez-les près de chaque objet de la collection. 
           Les visiteurs pourront les scanner pour accéder aux fiches détaillées.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 print:grid-cols-2 print:gap-8">
-          {heritageObjects.map((object) => (
-            <Card key={object.id} className="bg-card border-border print:break-inside-avoid print:border-2">
-              <CardContent className="p-6 flex flex-col items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 print:grid-cols-2 print:gap-8">
+          {heritageObjects.map((object, index) => (
+            <Card 
+              key={object.id} 
+              className="bg-card border-border print:break-inside-avoid print:border-2 animate-fade-in hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardContent className="p-4 sm:p-6 flex flex-col items-center">
                 <img
                   src={generateQRCodeUrl(object.id)}
                   alt={`QR Code pour ${object.title}`}
-                  className="w-40 h-40 mb-4"
+                  className="w-32 h-32 sm:w-40 sm:h-40 mb-4"
                 />
-                <h3 className="font-semibold text-foreground text-center mb-1">
+                <h3 className="font-serif font-bold text-foreground text-center mb-1">
                   {object.title}
                 </h3>
                 <p className="text-xs text-muted-foreground text-center mb-4">
@@ -115,7 +113,7 @@ const QRCodes = () => {
           }
         }
       `}</style>
-    </div>
+    </Layout>
   );
 };
 

@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, Home, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin, Home } from "lucide-react";
+import { Layout } from "@/components/Layout";
 import maisonMousgoumImage from "@/assets/maison-mousgoum.jpg";
 import maisonBamilekeImage from "@/assets/maison-bamileke.jpg";
 import maisonBororoImage from "@/assets/maison-bororo.jpg";
@@ -61,25 +60,16 @@ const heritageHouses: HeritageHouse[] = [
 
 const HeritageHouses = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <Layout>
+      {/* Page Header */}
       <div className="bg-primary text-primary-foreground px-4 py-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Link to="/">
-            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary-foreground/20">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-xl font-serif font-bold">Maisons de Patrimoine</h1>
-            <p className="text-sm text-primary-foreground/80">Architecture traditionnelle du Cameroun</p>
-          </div>
-        </div>
+        <h1 className="text-xl font-serif font-bold">Maisons de Patrimoine</h1>
+        <p className="text-sm text-primary-foreground/80">Architecture traditionnelle du Cameroun</p>
       </div>
 
       {/* Introduction */}
       <div className="px-4 py-6">
-        <div className="bg-card rounded-xl p-5 border border-border shadow-sm">
+        <div className="bg-card rounded-xl p-5 border border-border shadow-sm animate-fade-in">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Home className="w-5 h-5 text-primary" />
@@ -98,17 +88,18 @@ const HeritageHouses = () => {
 
       {/* Heritage Houses Gallery */}
       <div className="px-4 pb-8 space-y-6">
-        {heritageHouses.map((house) => (
+        {heritageHouses.map((house, index) => (
           <div
             key={house.id}
-            className="bg-card rounded-xl overflow-hidden border border-border shadow-md"
+            className="bg-card rounded-xl overflow-hidden border border-border shadow-md animate-fade-in group"
+            style={{ animationDelay: `${index * 0.15}s` }}
           >
             {/* Image */}
-            <div className="relative h-48">
+            <div className="relative h-48 overflow-hidden">
               <img
                 src={house.image}
                 alt={house.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/80 to-transparent p-4">
                 <h3 className="text-lg font-serif font-bold text-primary-foreground">
@@ -151,7 +142,7 @@ const HeritageHouses = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

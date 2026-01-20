@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, BookOpen, Palette, Heart, Leaf, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { BookOpen, Palette, Heart, Leaf, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Layout } from "@/components/Layout";
 import heroImage from "@/assets/hero-fondation.jpg";
 
 const pillars = [
@@ -9,51 +8,34 @@ const pillars = [
     icon: BookOpen,
     title: "Éducation",
     description: "Formation des jeunes aux métiers du patrimoine, ateliers de tissage Ndop, cours d'histoire locale et bibliothèque Harth accessible à tous.",
-    color: "text-blue-600 dark:text-blue-400"
   },
   {
     icon: Palette,
     title: "Culture",
     description: "Préservation et valorisation du patrimoine Bamiléké à travers le Centre des Cultures JLD, expositions et événements culturels.",
-    color: "text-purple-600 dark:text-purple-400"
   },
   {
     icon: Heart,
     title: "Santé",
     description: "Promotion de la médecine traditionnelle camerounaise et des plantes médicinales du Jardin Botanique aux 420+ espèces.",
-    color: "text-red-600 dark:text-red-400"
   },
   {
     icon: Leaf,
     title: "Environnement",
     description: "Conservation de la biodiversité locale, sensibilisation écologique et préservation des espèces végétales endémiques.",
-    color: "text-green-600 dark:text-green-400"
   },
   {
     icon: MapPin,
     title: "Tourisme",
     description: "Développement du tourisme culturel responsable à Bangoulap, visites guidées et découverte des Maisons de Patrimoine.",
-    color: "text-amber-600 dark:text-amber-400"
   }
 ];
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-4">
-          <Link to="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <h1 className="text-lg font-semibold text-foreground">À propos</h1>
-        </div>
-      </header>
-
+    <Layout>
       {/* Hero */}
-      <section className="relative h-48 overflow-hidden">
+      <section className="relative h-48 overflow-hidden -mt-14">
         <img
           src={heroImage}
           alt="Fondation Jean-Félicien Gacha"
@@ -61,18 +43,20 @@ const About = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-4 left-4 right-4">
-          <h2 className="text-2xl font-bold text-foreground">
+          <h1 className="text-2xl font-serif font-bold text-foreground animate-fade-in">
             Fondation Jean-Félicien Gacha
-          </h2>
-          <p className="text-sm text-muted-foreground">Depuis 2002 • Bangoulap, Cameroun</p>
+          </h1>
+          <p className="text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Depuis 2002 • Bangoulap, Cameroun
+          </p>
         </div>
       </section>
 
       {/* Histoire */}
-      <section className="container mx-auto px-4 py-6">
-        <Card className="bg-card border-border">
+      <section className="px-4 py-6">
+        <Card className="bg-card border-border animate-fade-in">
           <CardContent className="p-4">
-            <h3 className="text-lg font-semibold text-foreground mb-3">Notre Histoire</h3>
+            <h2 className="text-lg font-serif font-bold text-foreground mb-3">Notre Histoire</h2>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Fondée en 2002 par <strong className="text-foreground">Ly Dumas</strong>, 
               artiste plasticienne et diplomate, la Fondation Jean-Félicien Gacha porte le nom 
@@ -88,17 +72,24 @@ const About = () => {
       </section>
 
       {/* Les 5 Piliers */}
-      <section className="container mx-auto px-4 pb-8">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Les 5 Piliers</h3>
+      <section className="px-4 pb-8">
+        <h2 className="text-lg font-serif font-bold text-foreground mb-4 flex items-center gap-2">
+          <span className="w-1 h-6 bg-primary rounded-full" />
+          Les 5 Piliers
+        </h2>
         <div className="space-y-3">
           {pillars.map((pillar, index) => (
-            <Card key={index} className="bg-card border-border">
+            <Card 
+              key={index} 
+              className="bg-card border-border animate-fade-in hover:shadow-md hover:border-primary/30 transition-all duration-300"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <CardContent className="p-4 flex gap-4">
-                <div className={`p-3 rounded-full bg-muted ${pillar.color}`}>
-                  <pillar.icon className="h-5 w-5" />
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <pillar.icon className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-foreground">{pillar.title}</h4>
+                  <h3 className="font-serif font-bold text-foreground">{pillar.title}</h3>
                   <p className="text-sm text-muted-foreground mt-1">{pillar.description}</p>
                 </div>
               </CardContent>
@@ -108,21 +99,21 @@ const About = () => {
       </section>
 
       {/* Contact */}
-      <section className="container mx-auto px-4 pb-8">
-        <Card className="bg-primary/5 border-primary/20">
+      <section className="px-4 pb-8">
+        <Card className="bg-primary/5 border-primary/20 animate-fade-in">
           <CardContent className="p-4 text-center">
-            <h3 className="font-semibold text-foreground mb-2">Nous visiter</h3>
+            <h3 className="font-serif font-bold text-foreground mb-2">Nous visiter</h3>
             <p className="text-sm text-muted-foreground">
               Bangoulap, Région de l'Ouest<br />
               Cameroun
             </p>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-primary mt-2 font-medium">
               fondationjfgacha.org
             </p>
           </CardContent>
         </Card>
       </section>
-    </div>
+    </Layout>
   );
 };
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { QrCode, Compass, ChevronRight, Info, Grid3X3, Home, Leaf } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { QrCode, Compass, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QRScanner } from "@/components/QRScanner";
+import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-fondation.jpg";
@@ -23,16 +24,13 @@ const Index = () => {
   const handleScanResult = (result: string) => {
     setShowScanner(false);
     
-    // Check if the result is a full URL or just an ID
     let objectId = result;
     
-    // Handle full URLs like https://domain.com/objet/masque-ancestral
     if (result.includes("/objet/")) {
       const parts = result.split("/objet/");
-      objectId = parts[parts.length - 1].replace(/\/$/, ""); // Remove trailing slash
+      objectId = parts[parts.length - 1].replace(/\/$/, "");
     }
     
-    // Check if the object exists
     const object = heritageObjects.find(obj => obj.id === objectId);
     
     if (object) {
@@ -44,7 +42,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       {/* QR Scanner Modal */}
       {showScanner && (
         <QRScanner 
@@ -54,20 +52,20 @@ const Index = () => {
       )}
 
       {/* Hero Section */}
-      <div className="relative h-[50vh] overflow-hidden">
+      <div className="relative h-[40vh] md:h-[50vh] overflow-hidden -mt-14">
         <img
           src={heroImage}
           alt="Fondation Jean-Félicien Gacha - Bangoulap"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/10 to-background" />
         
         {/* Logo/Title Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 pt-14">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2 animate-fade-in">
             Fondation Jean-Félicien Gacha
           </h1>
-          <p className="text-base text-primary-foreground/90 drop-shadow-md">
+          <p className="text-sm sm:text-base text-primary-foreground/90 drop-shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Bangoulap, Grassfields - Cameroun
           </p>
         </div>
@@ -110,74 +108,43 @@ const Index = () => {
       </div>
 
       {/* Collection Preview */}
-      <div className="px-4 pb-8">
+      <div className="px-4 pb-6">
         <h3 className="text-lg font-serif font-bold text-foreground mb-4 flex items-center gap-2">
           <span className="w-1 h-6 bg-primary rounded-full" />
           Collection Ly et Frédéric Dumas
         </h3>
         
-        <div className="space-y-4">
-          {heritageObjects.map((object) => (
+        <div className="space-y-3">
+          {heritageObjects.map((object, index) => (
             <button
               key={object.id}
               onClick={() => navigate(`/objet/${object.id}`)}
-              className="w-full bg-card rounded-xl shadow-md border border-border overflow-hidden flex items-center hover:shadow-lg transition-shadow duration-300"
+              className="w-full bg-card rounded-xl shadow-md border border-border overflow-hidden flex items-center hover:shadow-lg hover:border-primary/30 transition-all duration-300 group active:scale-[0.98]"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-24 h-24 shrink-0">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 overflow-hidden">
                 <img
                   src={imageMap[object.image]}
                   alt={object.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="flex-1 p-4 text-left">
-                <h4 className="font-serif font-bold text-foreground">
+              <div className="flex-1 p-3 sm:p-4 text-left">
+                <h4 className="font-serif font-bold text-foreground text-sm sm:text-base">
                   {object.title}
                 </h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
                   {object.subtitle}
                 </p>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground mr-4" />
+              <ChevronRight className="w-5 h-5 text-muted-foreground mr-3 sm:mr-4 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
             </button>
           ))}
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <div className="px-4 pb-4 space-y-3">
-        <div className="flex gap-3">
-          <Link to="/maisons-patrimoine" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Home className="w-4 h-4 mr-2" />
-              Maisons
-            </Button>
-          </Link>
-          <Link to="/jardin-botanique" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Leaf className="w-4 h-4 mr-2" />
-              Jardin
-            </Button>
-          </Link>
-        </div>
-        <div className="flex gap-3">
-          <Link to="/a-propos" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Info className="w-4 h-4 mr-2" />
-              À propos
-            </Button>
-          </Link>
-          <Link to="/qr-codes" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Grid3X3 className="w-4 h-4 mr-2" />
-              QR Codes
-            </Button>
-          </Link>
-        </div>
-      </div>
-
       {/* Footer */}
-      <div className="px-4 pb-8">
+      <div className="px-4 pb-6">
         <div className="text-center py-6 border-t border-border">
           <p className="text-sm text-muted-foreground">
             © 2025 Fondation Jean-Félicien Gacha
@@ -187,7 +154,7 @@ const Index = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
