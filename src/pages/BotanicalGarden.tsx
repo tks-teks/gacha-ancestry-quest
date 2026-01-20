@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
-import { ArrowLeft, Leaf, Sparkles, Heart, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Leaf, Sparkles, Heart, Shield } from "lucide-react";
+import { Layout } from "@/components/Layout";
 import jardinBotaniqueImage from "@/assets/jardin-botanique.jpg";
 
 interface MedicinalPlant {
@@ -80,29 +79,21 @@ const categoryConfig = {
 
 const BotanicalGarden = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       {/* Hero Header */}
-      <div className="relative h-56">
+      <div className="relative h-56 -mt-14">
         <img
           src={jardinBotaniqueImage}
           alt="Jardin Botanique Médicinal"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 to-background" />
-        
-        <div className="absolute top-4 left-4">
-          <Link to="/">
-            <Button variant="ghost" size="icon" className="bg-background/20 backdrop-blur-sm text-primary-foreground hover:bg-background/40">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-        </div>
 
         <div className="absolute bottom-4 left-4 right-4">
-          <h1 className="text-2xl font-serif font-bold text-primary-foreground drop-shadow-lg">
+          <h1 className="text-2xl font-serif font-bold text-primary-foreground drop-shadow-lg animate-fade-in">
             Jardin Botanique Médicinal
           </h1>
-          <p className="text-primary-foreground/90 text-sm drop-shadow-md">
+          <p className="text-primary-foreground/90 text-sm drop-shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Plus de 420 espèces de plantes médicinales
           </p>
         </div>
@@ -110,7 +101,7 @@ const BotanicalGarden = () => {
 
       {/* Introduction */}
       <div className="px-4 py-6">
-        <div className="bg-card rounded-xl p-5 border border-border shadow-sm">
+        <div className="bg-card rounded-xl p-5 border border-border shadow-sm animate-fade-in">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Leaf className="w-5 h-5 text-primary" />
@@ -130,18 +121,20 @@ const BotanicalGarden = () => {
       {/* Statistics */}
       <div className="px-4 pb-6">
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-card rounded-xl p-4 border border-border text-center">
-            <p className="text-2xl font-bold text-primary">420+</p>
-            <p className="text-xs text-muted-foreground">Espèces</p>
-          </div>
-          <div className="bg-card rounded-xl p-4 border border-border text-center">
-            <p className="text-2xl font-bold text-primary">5</p>
-            <p className="text-xs text-muted-foreground">Hectares</p>
-          </div>
-          <div className="bg-card rounded-xl p-4 border border-border text-center">
-            <p className="text-2xl font-bold text-primary">12</p>
-            <p className="text-xs text-muted-foreground">Catégories</p>
-          </div>
+          {[
+            { value: "420+", label: "Espèces" },
+            { value: "5", label: "Hectares" },
+            { value: "12", label: "Catégories" },
+          ].map((stat, index) => (
+            <div 
+              key={stat.label}
+              className="bg-card rounded-xl p-4 border border-border text-center animate-fade-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <p className="text-2xl font-bold text-primary">{stat.value}</p>
+              <p className="text-xs text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -153,16 +146,17 @@ const BotanicalGarden = () => {
         </h3>
 
         <div className="space-y-3">
-          {medicinalPlants.map((plant) => {
+          {medicinalPlants.map((plant, index) => {
             const config = categoryConfig[plant.category];
             const IconComponent = config.icon;
             
             return (
               <div
                 key={plant.id}
-                className="bg-card rounded-xl p-4 border border-border shadow-sm"
+                className="bg-card rounded-xl p-4 border border-border shadow-sm animate-fade-in hover:shadow-md hover:border-primary/30 transition-all duration-300"
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
-              <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
                     <IconComponent className="w-5 h-5 text-primary" />
                   </div>
@@ -193,7 +187,7 @@ const BotanicalGarden = () => {
 
       {/* Call to Action */}
       <div className="px-4 pb-8">
-        <div className="bg-primary/10 rounded-xl p-5 border border-primary/20">
+        <div className="bg-primary/10 rounded-xl p-5 border border-primary/20 animate-fade-in">
           <h3 className="font-serif font-bold text-foreground mb-2">
             🌿 Visites guidées disponibles
           </h3>
@@ -215,7 +209,7 @@ const BotanicalGarden = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

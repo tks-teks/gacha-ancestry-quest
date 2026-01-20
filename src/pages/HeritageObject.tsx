@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { Layout } from "@/components/Layout";
 import { getHeritageObject } from "@/data/heritageObjects";
 import tissuNdopImage from "@/assets/tissu-ndop.jpg";
 import perlageRoyalImage from "@/assets/perlage-royal.jpg";
@@ -21,29 +22,31 @@ const HeritageObject = () => {
 
   if (!object) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-serif font-bold text-foreground mb-4">
-            Objet non trouvé
-          </h1>
-          <Button onClick={() => navigate("/")} variant="default">
-            Retour à l'accueil
-          </Button>
+      <Layout>
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center animate-fade-in">
+            <h1 className="text-2xl font-serif font-bold text-foreground mb-4">
+              Objet non trouvé
+            </h1>
+            <Button onClick={() => navigate("/")} variant="default">
+              Retour à l'accueil
+            </Button>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout showHeader={false}>
       {/* Header Image */}
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-64 sm:h-72 overflow-hidden">
         <img
           src={imageMap[object.image]}
           alt={object.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-transparent to-background" />
         
         {/* Back Button */}
         <Button
@@ -58,8 +61,8 @@ const HeritageObject = () => {
 
       {/* Content */}
       <div className="px-4 pb-8 -mt-8 relative z-10">
-        <div className="bg-card rounded-xl shadow-lg p-6 mb-6 border border-border">
-          <h1 className="text-3xl font-serif font-bold text-foreground mb-2">
+        <div className="bg-card rounded-xl shadow-lg p-5 sm:p-6 mb-6 border border-border animate-fade-in">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-foreground mb-2">
             {object.title}
           </h1>
           <p className="text-primary font-medium mb-4">{object.subtitle}</p>
@@ -67,26 +70,28 @@ const HeritageObject = () => {
           <AudioPlayer text={object.audioText} />
           
           <div className="mt-6">
-            <p className="text-foreground leading-relaxed">
+            <p className="text-foreground leading-relaxed text-sm sm:text-base">
               {object.description}
             </p>
           </div>
         </div>
 
         {/* Ancestor Chat */}
-        <AncestorChat
-          ancestorName={object.ancestorName}
-          greeting={object.ancestorGreeting}
-          objectContext={{
-            title: object.title,
-            subtitle: object.subtitle,
-            description: object.description,
-            audioText: object.audioText,
-            ancestorName: object.ancestorName,
-          }}
-        />
+        <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <AncestorChat
+            ancestorName={object.ancestorName}
+            greeting={object.ancestorGreeting}
+            objectContext={{
+              title: object.title,
+              subtitle: object.subtitle,
+              description: object.description,
+              audioText: object.audioText,
+              ancestorName: object.ancestorName,
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
