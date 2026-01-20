@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { QrCode, Compass, ChevronRight, Info, Grid3X3 } from "lucide-react";
+import { QrCode, Compass, ChevronRight, Info, Grid3X3, Home, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QRScanner } from "@/components/QRScanner";
 import { heritageObjects } from "@/data/heritageObjects";
@@ -145,7 +145,21 @@ const Index = () => {
       </div>
 
       {/* Navigation Links */}
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 space-y-3">
+        <div className="flex gap-3">
+          <Link to="/maisons-patrimoine" className="flex-1">
+            <Button variant="outline" className="w-full">
+              <Home className="w-4 h-4 mr-2" />
+              Maisons
+            </Button>
+          </Link>
+          <Link to="/jardin-botanique" className="flex-1">
+            <Button variant="outline" className="w-full">
+              <Leaf className="w-4 h-4 mr-2" />
+              Jardin
+            </Button>
+          </Link>
+        </div>
         <div className="flex gap-3">
           <Link to="/a-propos" className="flex-1">
             <Button variant="outline" className="w-full">

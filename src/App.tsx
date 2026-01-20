@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import HeritageObject from "./pages/HeritageObject";
 import About from "./pages/About";
 import QRCodes from "./pages/QRCodes";
+import HeritageHouses from "./pages/HeritageHouses";
+import BotanicalGarden from "./pages/BotanicalGarden";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +24,8 @@ const App = () => (
           <Route path="/objet/:id" element={<HeritageObject />} />
           <Route path="/a-propos" element={<About />} />
           <Route path="/qr-codes" element={<QRCodes />} />
+          <Route path="/maisons-patrimoine" element={<HeritageHouses />} />
+          <Route path="/jardin-botanique" element={<BotanicalGarden />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
