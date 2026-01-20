@@ -7,14 +7,12 @@ import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-fondation.jpg";
-import tissuNdopImage from "@/assets/tissu-ndop.jpg";
-import perlageRoyalImage from "@/assets/perlage-royal.jpg";
-import masqueBamilekeImage from "@/assets/masque-bamileke.jpg";
+import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
+import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
 
 const imageMap: Record<string, string> = {
-  "tissu-ndop": tissuNdopImage,
-  "perlage-royal": perlageRoyalImage,
-  "masque-bamileke": masqueBamilekeImage,
+  "case-obus-mousgoum": caseObusMousgoumImage,
+  "sculpture-recyclee": sculptureRecycleeImage,
 };
 
 const Index = () => {
