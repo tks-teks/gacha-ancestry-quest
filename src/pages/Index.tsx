@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QrCode, Compass, ChevronRight } from "lucide-react";
+import { QrCode, Compass, ChevronRight, Info, Leaf, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QRScanner } from "@/components/QRScanner";
 import { heritageObjects } from "@/data/heritageObjects";
@@ -23,16 +23,13 @@ const Index = () => {
   const handleScanResult = (result: string) => {
     setShowScanner(false);
     
-    // Check if the result is a full URL or just an ID
     let objectId = result;
     
-    // Handle full URLs like https://domain.com/objet/masque-ancestral
     if (result.includes("/objet/")) {
       const parts = result.split("/objet/");
-      objectId = parts[parts.length - 1].replace(/\/$/, ""); // Remove trailing slash
+      objectId = parts[parts.length - 1].replace(/\/$/, "");
     }
     
-    // Check if the object exists
     const object = heritageObjects.find(obj => obj.id === objectId);
     
     if (object) {
@@ -62,7 +59,6 @@ const Index = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-background" />
         
-        {/* Logo/Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2">
             Fondation Jean-Félicien Gacha
@@ -96,7 +92,6 @@ const Index = () => {
             Scannez les QR codes pour dialoguer avec les esprits ancestraux.
           </p>
           
-          {/* QR Scanner Button */}
           <Button
             variant="scanner"
             size="xl"
@@ -106,6 +101,41 @@ const Index = () => {
             <QrCode className="w-6 h-6 mr-2" />
             Scanner un QR Code
           </Button>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div className="px-4 pb-6">
+        <div className="grid grid-cols-3 gap-3">
+          <button
+            onClick={() => navigate("/a-propos")}
+            className="bg-card rounded-xl p-4 border border-border shadow-sm flex flex-col items-center gap-2 hover:shadow-md transition-shadow"
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Info className="w-5 h-5 text-primary" />
+            </div>
+            <span className="text-sm font-medium text-foreground">À propos</span>
+          </button>
+          
+          <button
+            onClick={() => navigate("/jardin-botanique")}
+            className="bg-card rounded-xl p-4 border border-border shadow-sm flex flex-col items-center gap-2 hover:shadow-md transition-shadow"
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Leaf className="w-5 h-5 text-primary" />
+            </div>
+            <span className="text-sm font-medium text-foreground">Jardin</span>
+          </button>
+          
+          <button
+            onClick={() => navigate("/qr-codes")}
+            className="bg-card rounded-xl p-4 border border-border shadow-sm flex flex-col items-center gap-2 hover:shadow-md transition-shadow"
+          >
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Grid3X3 className="w-5 h-5 text-primary" />
+            </div>
+            <span className="text-sm font-medium text-foreground">QR Codes</span>
+          </button>
         </div>
       </div>
 
