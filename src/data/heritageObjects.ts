@@ -7,6 +7,8 @@ export interface HeritageObject {
   image: string;
   ancestorName: string;
   ancestorGreeting: string;
+  model3dUrl?: string;
+  iosModelUrl?: string;
 }
 
 export const heritageObjects: HeritageObject[] = [
