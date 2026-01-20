@@ -13,42 +13,6 @@ export interface HeritageObject {
 
 export const heritageObjects: HeritageObject[] = [
   {
-    id: "tissu-ndop",
-    title: "Tissu Ndop",
-    subtitle: "Étoffe royale, Ouest Cameroun",
-    description: "Le Ndop est l'étoffe royale emblématique des cours de l'Ouest Cameroun. Ce tissu indigo aux motifs géométriques blancs est réalisé selon la technique ancestrale du tie-dye. Réservé aux cérémonies royales et aux grandes occasions, il symbolise le prestige et l'identité culturelle des Bamiléké. La Fondation Jean-Félicien Gacha mène un travail important de valorisation et de recherche sur cette tradition textile unique.",
-    audioText: "Je suis le Ndop, tissu des rois et gardien des traditions. Mes fils indigo portent les secrets des cours royales de l'Ouest Cameroun. Chaque motif blanc que tu vois est né de mains patientes qui ont noué et dénoué les fils selon des rituels transmis de génération en génération. Dans les Grassfields, j'habille les chefs lors des cérémonies, je drape les trônes et j'accompagne les grands moments de la vie. Mon bleu profond évoque le ciel nocturne sous lequel nos ancêtres ont tissé leurs premiers rêves.",
-    image: "tissu-ndop",
-    ancestorName: "Esprit du Ndop",
-    ancestorGreeting: "Je suis l'Esprit du Ndop, gardien des traditions textiles royales. Interroge-moi sur l'art du tissage et les cérémonies des cours Bamiléké.",
-    // Modèle 3D de tissu/textile - démo avec un modèle de coussin texturé
-    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/MaterialsVariantsShoe/glTF-Binary/MaterialsVariantsShoe.glb"
-  },
-  {
-    id: "perlage-royal",
-    title: "Perlage Royal",
-    subtitle: "Art du perlage Bamiléké",
-    description: "L'art du perlage est une tradition ancestrale des Grassfields camerounais. Ces objets cérémoniels recouverts de perles de verre colorées sont des symboles de pouvoir royal. Le Centre des Cultures JLD de la Fondation Gacha abrite des ateliers de formation au perlage, perpétuant ce savoir-faire unique. La Collection Ly et Frédéric Dumas expose de remarquables exemples de cet art raffiné.",
-    audioText: "Perle après perle, couleur après couleur, je suis née des mains habiles de nos artisans. Chaque perle que tu vois a été choisie et placée avec intention — le rouge pour la force, le bleu pour la sagesse, le jaune pour la prospérité. Dans les royaumes Bamiléké, seuls les chefs et les notables pouvaient posséder des objets perlés. Je suis un symbole de prestige, un témoignage vivant du raffinement de notre culture. Au Centre des Cultures JLD, les jeunes apprentis perpétuent cet art millénaire.",
-    image: "perlage-royal",
-    ancestorName: "Esprit du Perlage",
-    ancestorGreeting: "Je suis l'Esprit du Perlage, gardienne de l'art des perles royales. Demande-moi les secrets des motifs et des couleurs sacrées.",
-    // Modèle 3D décoratif - démo avec un modèle ornemental
-    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb"
-  },
-  {
-    id: "masque-bamileke",
-    title: "Masque Bamiléké",
-    subtitle: "Sculpture sur bois, Grassfields",
-    description: "Ce masque cérémoniel Bamiléké est sculpté dans le bois selon des techniques transmises depuis des siècles dans les Grassfields camerounais. Porté lors des cérémonies d'initiation, des funérailles royales et des fêtes traditionnelles, il représente les esprits ancestraux qui veillent sur la communauté. Les Maisons de Patrimoine de la Fondation Gacha présentent des reproductions d'architectures traditionnelles Bamiléké où ces masques trouvaient leur place sacrée.",
-    audioText: "Je suis le souffle des ancêtres sculpté dans le bois. Quand un initié me porte, il devient le pont entre le monde visible et le monde invisible. Mes traits racontent l'histoire de notre peuple — les victoires, les épreuves, les espoirs. Dans les cases royales de Bangoulap, j'ai dansé au rythme des tambours lors des grandes cérémonies. Chaque entaille de mon visage est une prière, chaque courbe est une bénédiction. Les sculpteurs qui m'ont créé ont jeûné et prié avant de toucher le bois sacré.",
-    image: "masque-bamileke",
-    ancestorName: "Esprit du Masque",
-    ancestorGreeting: "Je suis l'Esprit du Masque Bamiléké, gardien des cérémonies sacrées. Pose-moi tes questions sur les rites et traditions des Grassfields.",
-    // Modèle 3D de masque/sculpture - démo avec un modèle de casque
-    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
-  },
-  {
     id: "case-obus-mousgoum",
     title: "Case Obus Mousgoum",
     subtitle: "Architecture traditionnelle, Extrême-Nord Cameroun",
@@ -57,8 +21,18 @@ export const heritageObjects: HeritageObject[] = [
     image: "case-obus-mousgoum",
     ancestorName: "Esprit de la Case Obus",
     ancestorGreeting: "Je suis l'Esprit de la Case Obus Mousgoum, gardien des secrets de l'architecture de terre. Interroge-moi sur les techniques de construction ancestrales et la vie dans les plaines du Nord.",
-    // Modèle 3D d'architecture - démo avec un modèle de maison
     model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb"
+  },
+  {
+    id: "sculpture-recyclee",
+    title: "Sculpture Recyclée",
+    subtitle: "Art contemporain écologique, Centre des Cultures JLD",
+    description: "Cette sculpture anthropomorphe fascinante est une œuvre d'art contemporain créée entièrement à partir de matériaux recyclés : claviers d'ordinateur, pièces électroniques, fils, métal et objets du quotidien réinventés. Elle incarne la philosophie de la Fondation Jean-Félicien Gacha qui promeut le développement durable et la créativité artistique. Cette œuvre unique dialogue entre tradition et modernité, rappelant les masques ancestraux tout en portant un message fort sur l'environnement et la transformation des déchets en beauté. Positionnée à l'entrée du Centre des Cultures JLD, elle accueille les visiteurs avec son regard bienveillant fait de composants électroniques.",
+    audioText: "Je suis né des rebuts de votre monde moderne. Claviers abandonnés, circuits oubliés, fils enchevêtrés — tous ont trouvé en moi une nouvelle vie. Mon créateur a vu dans ces déchets non pas une fin, mais un nouveau commencement. Ma tête ronde comme un tambour traditionnel, mon corps tissé de touches de clavier, je suis le pont entre vos technologies et l'esprit créateur de nos ancêtres. Au Centre des Cultures JLD, je vous rappelle que rien ne se perd vraiment, que tout peut renaître sous des mains inspirées. Je suis le gardien de l'entrée, une sentinelle écologique qui vous invite à repenser votre rapport aux objets.",
+    image: "sculpture-recyclee",
+    ancestorName: "Esprit de la Sculpture",
+    ancestorGreeting: "Je suis l'Esprit de la Sculpture Recyclée, témoin de la créativité humaine et gardien de l'environnement. Questionne-moi sur l'art du recyclage et le message écologique que je porte.",
+    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
   }
 ];
 
