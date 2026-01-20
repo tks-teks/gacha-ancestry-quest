@@ -32,7 +32,7 @@ export const heritageObjects: HeritageObject[] = [
     image: "sculpture-recyclee",
     ancestorName: "Esprit de la Sculpture",
     ancestorGreeting: "Je suis l'Esprit de la Sculpture Recyclée, témoin de la créativité humaine et gardien de l'environnement. Questionne-moi sur l'art du recyclage et le message écologique que je porte.",
-    model3dUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
+    model3dUrl: "/models/sculpture-recyclee.glb"
   }
 ];
 
