@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Loader2, RotateCcw, Maximize2 } from "lucide-react";
+import { Loader2, RotateCcw, Maximize2, Info, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Annotation3D } from "@/data/annotations3D";
 import "@google/model-viewer";
 
 interface Object3DViewerProps {
@@ -9,6 +10,7 @@ interface Object3DViewerProps {
   posterUrl?: string;
   alt: string;
   showARButton?: boolean;
+  annotations?: Annotation3D[];
 }
 
 export const Object3DViewer = ({
@@ -17,16 +19,17 @@ export const Object3DViewer = ({
   posterUrl,
   alt,
   showARButton = true,
+  annotations = [],
 }: Object3DViewerProps) => {
   const viewerRef = useRef<HTMLElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [loadProgressPct, setLoadProgressPct] = useState<number | null>(null);
+  const [activeAnnotation, setActiveAnnotation] = useState<Annotation3D | null>(null);
+  const [showAnnotations, setShowAnnotations] = useState(true);
 
   useEffect(() => {
-    // NOTE: <model-viewer> is a Web Component; React's onLoad/onError are not
-    // reliably fired for custom elements. We attach DOM event listeners directly.
     const el = viewerRef.current as any;
     if (!el || !modelUrl) return;
 
@@ -67,9 +70,6 @@ export const Object3DViewer = ({
     el.addEventListener("error", onError);
     el.addEventListener("progress", onProgress);
 
-    // Extra safety: some browsers/dev builds may render the model but never
-    // dispatch the custom-element 'load' event. If we detect the model is
-    // available, we stop the loading UI.
     const pollId = window.setInterval(() => {
       const current = viewerRef.current as any;
       if (!current) return;
@@ -127,15 +127,48 @@ export const Object3DViewer = ({
         </div>
       )}
 
-      {/* Fullscreen toggle */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleFullscreen}
-        className="absolute top-2 right-2 z-20 bg-background/80 backdrop-blur-sm hover:bg-background/90"
-      >
-        <Maximize2 className="w-4 h-4" />
-      </Button>
+      {/* Controls */}
+      <div className="absolute top-2 right-2 z-20 flex gap-1">
+        {annotations.length > 0 && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowAnnotations(!showAnnotations)}
+            className={`bg-background/80 backdrop-blur-sm hover:bg-background/90 ${
+              showAnnotations ? "text-primary" : ""
+            }`}
+            title={showAnnotations ? "Masquer les annotations" : "Afficher les annotations"}
+          >
+            <Info className="w-4 h-4" />
+          </Button>
+        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleFullscreen}
+          className="bg-background/80 backdrop-blur-sm hover:bg-background/90"
+        >
+          <Maximize2 className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Active annotation popup */}
+      {activeAnnotation && (
+        <div className="absolute bottom-16 left-4 right-4 z-30 bg-card/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-border animate-fade-in">
+          <button
+            onClick={() => setActiveAnnotation(null)}
+            className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          <h4 className="font-serif font-semibold text-foreground mb-1">
+            {activeAnnotation.title}
+          </h4>
+          <p className="text-sm text-muted-foreground">
+            {activeAnnotation.description}
+          </p>
+        </div>
+      )}
 
       {/* 3D Model Viewer */}
       <model-viewer
@@ -166,6 +199,51 @@ export const Object3DViewer = ({
           "--poster-color": "transparent",
         } as React.CSSProperties}
       >
+        {/* Annotation hotspots */}
+        {showAnnotations &&
+          annotations.map((annotation) => (
+            <button
+              key={annotation.id}
+              className="Hotspot"
+              slot={`hotspot-${annotation.id}`}
+              data-position={annotation.position}
+              data-normal={annotation.normal}
+              data-visibility-attribute="visible"
+              onClick={() => setActiveAnnotation(annotation)}
+              style={{
+                display: "block",
+                width: "24px",
+                height: "24px",
+                borderRadius: "50%",
+                border: "none",
+                backgroundColor: "hsl(var(--primary))",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                cursor: "pointer",
+                transition: "transform 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLElement).style.transform = "scale(1.2)";
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLElement).style.transform = "scale(1)";
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                }}
+              >
+                ?
+              </span>
+            </button>
+          ))}
+
         {/* AR Button slot */}
         <button
           slot="ar-button"

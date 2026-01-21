@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
@@ -7,7 +7,11 @@ import { Layout } from "@/components/Layout";
 import { Object3DViewer } from "@/components/Object3DViewer";
 import { AnimatedDescription } from "@/components/AnimatedDescription";
 import { ParallaxImage } from "@/components/ParallaxImage";
+import { ImageGallery } from "@/components/ImageGallery";
+import { Guestbook } from "@/components/Guestbook";
 import { getHeritageObject } from "@/data/heritageObjects";
+import { getHeritageGallery } from "@/data/heritageGalleries";
+import { getObjectAnnotations } from "@/data/annotations3D";
 import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
 import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
 
@@ -20,6 +24,8 @@ const HeritageObject = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const object = getHeritageObject(id || "");
+  const galleryImages = getHeritageGallery(id || "");
+  const annotations = getObjectAnnotations(id || "");
 
   if (!object) {
     return (
@@ -96,6 +102,24 @@ const HeritageObject = () => {
           </div>
         </div>
 
+        {/* Photo Gallery Section */}
+        {galleryImages.length > 0 && (
+          <div 
+            className="bg-card rounded-xl shadow-lg p-4 sm:p-5 mb-6 border border-border animate-fade-in"
+            style={{ animationDelay: "0.25s" }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
+                <Images className="w-4 h-4 text-accent" />
+              </div>
+              <h2 className="text-lg font-serif font-semibold text-foreground">
+                Galerie Photos
+              </h2>
+            </div>
+            <ImageGallery images={galleryImages} />
+          </div>
+        )}
+
         {/* 3D Viewer Section */}
         <div 
           className="bg-card rounded-xl shadow-lg p-4 sm:p-5 mb-6 border border-border animate-scale-in"
@@ -116,10 +140,11 @@ const HeritageObject = () => {
             posterUrl={imageMap[object.image]}
             alt={object.title}
             showARButton={true}
+            annotations={annotations}
           />
           
           <p className="text-xs text-muted-foreground text-center mt-3">
-            Faites glisser pour faire tourner • Pincez pour zoomer • Cliquez sur "Voir en AR" sur mobile
+            Faites glisser pour faire tourner • Pincez pour zoomer • Cliquez sur les points "?" pour les annotations
           </p>
         </div>
 
@@ -133,6 +158,11 @@ const HeritageObject = () => {
           </h2>
           
           <AnimatedDescription text={object.description} />
+        </div>
+
+        {/* Guestbook */}
+        <div className="animate-fade-in mb-6" style={{ animationDelay: "0.4s" }}>
+          <Guestbook objectId={object.id} objectTitle={object.title} />
         </div>
 
         {/* Ancestor Chat */}
