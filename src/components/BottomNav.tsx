@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Building2, Leaf, Info, Grid3X3 } from "lucide-react";
+import { Home, Building2, Leaf, Info, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { path: "/", label: "Accueil", icon: Home },
+  { path: "/parcours", label: "Parcours", icon: Map },
   { path: "/maisons-patrimoine", label: "Maisons", icon: Building2 },
   { path: "/jardin-botanique", label: "Jardin", icon: Leaf },
   { path: "/a-propos", label: "À propos", icon: Info },
-  { path: "/qr-codes", label: "QR", icon: Grid3X3 },
 ];
 
 export const BottomNav = () => {
