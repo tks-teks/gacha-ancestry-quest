@@ -12,6 +12,8 @@ export interface HeritageGallery {
 
 // Import images
 import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
+import caseObusInterieur from "@/assets/case-obus-interieur.jpg";
+import caseObusExterieur from "@/assets/case-obus-exterieur.jpg";
 import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
 import maisonMousgoumImage from "@/assets/maison-mousgoum.jpg";
 import maisonBamileakeImage from "@/assets/maison-bamileke.jpg";
@@ -27,6 +29,16 @@ export const heritageGalleries: HeritageGallery[] = [
         src: caseObusMousgoumImage,
         alt: "Case Obus Mousgoum - Vue principale",
         caption: "Vue d'ensemble des cases obus au Centre des Cultures JLD",
+      },
+      {
+        src: caseObusInterieur,
+        alt: "Case Obus Mousgoum - Vue intérieure",
+        caption: "Vue panoramique depuis l'intérieur d'une case obus",
+      },
+      {
+        src: caseObusExterieur,
+        alt: "Case Obus Mousgoum - Vue extérieure",
+        caption: "Visiteurs admirant l'ensemble architectural des cases obus",
       },
       {
         src: maisonMousgoumImage,
