@@ -48,6 +48,20 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [displayMessages]);
 
+  const setLastAncestorMessage = (content: string) => {
+    setDisplayMessages((prev) => {
+      const updated = [...prev];
+      const lastIndex = updated.length - 1;
+
+      if (lastIndex >= 0 && updated[lastIndex]?.role === "ancestor") {
+        updated[lastIndex] = { role: "ancestor", content };
+        return updated;
+      }
+
+      return [...updated, { role: "ancestor", content }];
+    });
+  };
+
   const streamChat = async (userMessage: string) => {
     const newMessages: Message[] = [...messages, { role: "user", content: userMessage }];
     
@@ -66,10 +80,12 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
     if (!resp.ok) {
       const errorData = await resp.json().catch(() => ({}));
       if (resp.status === 429) {
-        throw new Error(errorData.error || "Trop de requêtes, veuillez réessayer plus tard.");
+        setLastAncestorMessage(errorData.error || "Trop de requêtes, veuillez réessayer plus tard.");
+        return;
       }
       if (resp.status === 402) {
-        throw new Error(errorData.error || "Crédits épuisés.");
+        setLastAncestorMessage(errorData.error || "Crédits épuisés.");
+        return;
       }
       throw new Error(errorData.error || "Échec de la connexion avec l'ancêtre");
     }
@@ -80,9 +96,6 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
     const decoder = new TextDecoder();
     let textBuffer = "";
     let assistantContent = "";
-
-    // Add empty ancestor message
-    setDisplayMessages(prev => [...prev, { role: "ancestor", content: "" }]);
 
     while (true) {
       const { done, value } = await reader.read();
@@ -107,11 +120,7 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
           const content = parsed.choices?.[0]?.delta?.content as string | undefined;
           if (content) {
             assistantContent += content;
-            setDisplayMessages(prev => {
-              const updated = [...prev];
-              updated[updated.length - 1] = { role: "ancestor", content: assistantContent };
-              return updated;
-            });
+            setLastAncestorMessage(assistantContent);
           }
         } catch {
           textBuffer = line + "\n" + textBuffer;
@@ -130,7 +139,12 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
 
     const userMessage = input.trim();
     setInput("");
-    setDisplayMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    // Add user message + placeholder for streaming answer
+    setDisplayMessages((prev) => [
+      ...prev,
+      { role: "user", content: userMessage },
+      { role: "ancestor", content: "" },
+    ]);
     setIsLoading(true);
 
     try {
@@ -138,8 +152,8 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
     } catch (error) {
       console.error("Chat error:", error);
       toast.error(error instanceof Error ? error.message : "Erreur de connexion avec l'ancêtre");
-      // Remove the empty ancestor message on error
-      setDisplayMessages(prev => prev.slice(0, -1));
+      // Keep the UI consistent (do not remove the user's message)
+      setLastAncestorMessage("Je n'arrive pas à répondre pour le moment. Réessaie dans un instant.");
     } finally {
       setIsLoading(false);
     }

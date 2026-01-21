@@ -85,33 +85,59 @@ Tu es la mémoire vivante de cet objet. Tu connais intimement:
 
 Accueille chaque question avec bienveillance et partage ta sagesse ancestrale.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages,
-        ],
-        stream: true,
-      }),
-    });
+    const toSseErrorStream = (text: string) => {
+      const encoder = new TextEncoder();
+      return new ReadableStream({
+        start(controller) {
+          const payload = {
+            choices: [{ delta: { content: text } }],
+          };
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n`));
+          controller.enqueue(encoder.encode("data: [DONE]\n"));
+          controller.close();
+        },
+      });
+    };
+
+    const makeUpstreamRequest = async () =>
+      fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [{ role: "system", content: systemPrompt }, ...messages],
+          stream: true,
+        }),
+      });
+
+    // Retry a little on upstream rate limits to smooth out bursts.
+    let response: Response | null = null;
+    const backoffsMs = [500, 1200, 2500];
+    for (let attempt = 0; attempt < backoffsMs.length; attempt++) {
+      response = await makeUpstreamRequest();
+      if (response.ok) break;
+      if (response.status !== 429) break;
+      await new Promise((r) => setTimeout(r, backoffsMs[attempt]));
+    }
+
+    // Final attempt (or first non-429)
+    if (!response) response = await makeUpstreamRequest();
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Trop de requêtes, veuillez réessayer plus tard." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        // Return an SSE stream (200) so the client can show a friendly message without crashing.
+        return new Response(toSseErrorStream("Je suis très sollicité en ce moment. Attends quelques instants puis repose ta question."), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Crédits épuisés, veuillez recharger votre compte." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(toSseErrorStream("Mes forces sont épuisées pour l'instant. Reviens plus tard pour continuer notre échange."), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
         });
       }
       const errorText = await response.text();
