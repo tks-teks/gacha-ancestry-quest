@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QrCode, Compass, ChevronRight } from "lucide-react";
+import { QrCode, Compass, ChevronRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QRScanner } from "@/components/QRScanner";
 import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
 import { toast } from "sonner";
+import { ScrollReveal, StaggerReveal } from "@/hooks/useScrollAnimation";
 import heroImage from "@/assets/hero-fondation.jpg";
 import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
 import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
@@ -89,108 +90,113 @@ const Index = () => {
       </div>
 
       {/* Welcome Section with floating card */}
-      <div className="px-4 py-8 -mt-20 relative z-10">
-        <div className="bg-card/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 border border-border/50 relative overflow-hidden">
-          {/* Decorative corner accent */}
-          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
-          <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-primary/5 to-transparent rounded-tr-full" />
-          
-          <div className="relative flex items-center gap-4 mb-5">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg animate-glow-pulse">
-              <Compass className="w-7 h-7 text-primary-foreground" />
+      <ScrollReveal direction="up" delay={0.1}>
+        <div className="px-4 py-8 -mt-20 relative z-10">
+          <div className="bg-card/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 border border-border/50 relative overflow-hidden">
+            {/* Decorative corner accent */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-primary/5 to-transparent rounded-tr-full" />
+            
+            <div className="relative flex items-center gap-4 mb-5">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg animate-glow-pulse">
+                <Compass className="w-7 h-7 text-primary-foreground" />
+              </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground">
+                  Bienvenue, explorateur
+                </h2>
+                <p className="text-sm text-muted-foreground font-medium">
+                  Centre des Cultures JLD
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground">
-                Bienvenue, explorateur
-              </h2>
-              <p className="text-sm text-muted-foreground font-medium">
-                Centre des Cultures JLD
+            
+            <p className="text-foreground/90 mb-6 leading-relaxed text-sm sm:text-base">
+              Créée en 2002 par Ly Dumas pour honorer la mémoire de son père Jean-Félicien Gacha (1922-1972), 
+              la Fondation préserve et transmet le patrimoine culturel des Grassfields. 
+              <span className="text-primary font-medium"> Scannez les QR codes</span> pour dialoguer avec les esprits ancestraux.
+            </p>
+            
+            {/* Enhanced action button */}
+            <Button
+              variant="scanner"
+              size="xl"
+              className="w-full group relative overflow-hidden"
+              onClick={() => setShowScanner(true)}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              <QrCode className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+              Scanner un QR code
+            </Button>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* Collection Preview with enhanced cards */}
+      <ScrollReveal direction="up" delay={0.2}>
+        <div className="px-4 pb-8">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-1.5 h-8 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
+            <h3 className="text-lg sm:text-xl font-serif font-bold text-foreground">
+              Collection Ly et Frédéric Dumas
+            </h3>
+          </div>
+          
+          <StaggerReveal className="space-y-4" staggerDelay={0.15} direction="up">
+            {heritageObjects.map((object) => (
+              <button
+                key={object.id}
+                onClick={() => navigate(`/objet/${object.id}`)}
+                className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex items-center hover:shadow-xl hover:border-primary/40 transition-all duration-500 group active:scale-[0.98]"
+              >
+                {/* Image with gradient overlay */}
+                <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 overflow-hidden relative">
+                  <img
+                    src={imageMap[object.image]}
+                    alt={object.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/20 group-hover:opacity-0 transition-opacity" />
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1 p-4 sm:p-5 text-left">
+                  <h4 className="font-serif font-bold text-foreground text-base sm:text-lg group-hover:text-primary transition-colors duration-300">
+                    {object.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
+                    {object.subtitle}
+                  </p>
+                </div>
+                
+                {/* Arrow with enhanced animation */}
+                <div className="mr-4 sm:mr-5 flex items-center justify-center w-10 h-10 rounded-full bg-muted/50 group-hover:bg-primary/10 transition-all duration-300">
+                  <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300" />
+                </div>
+              </button>
+            ))}
+          </StaggerReveal>
+        </div>
+      </ScrollReveal>
+
+      {/* Enhanced Footer */}
+      <ScrollReveal direction="fade" delay={0.3}>
+        <div className="px-4 pb-24 md:pb-8">
+          <div className="relative py-8 border-t border-border/50">
+            {/* Decorative element */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded-full" />
+            
+            <div className="text-center">
+              <p className="text-sm font-medium text-foreground/80">
+                © 2025 Fondation Jean-Félicien Gacha
+              </p>
+              <p className="text-xs text-muted-foreground mt-2 italic">
+                « Susciter des vocations, développer les talents, transmettre les savoirs »
               </p>
             </div>
           </div>
-          
-          <p className="text-foreground/90 mb-6 leading-relaxed text-sm sm:text-base">
-            Créée en 2002 par Ly Dumas pour honorer la mémoire de son père Jean-Félicien Gacha (1922-1972), 
-            la Fondation préserve et transmet le patrimoine culturel des Grassfields. 
-            <span className="text-primary font-medium"> Scannez les QR codes</span> pour dialoguer avec les esprits ancestraux.
-          </p>
-          
-          {/* Enhanced action button */}
-          <Button
-            variant="scanner"
-            size="xl"
-            className="w-full group relative overflow-hidden"
-            onClick={() => setShowScanner(true)}
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-            <QrCode className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
-            Scanner un QR code
-          </Button>
         </div>
-      </div>
-
-      {/* Collection Preview with enhanced cards */}
-      <div className="px-4 pb-8">
-        <div className="flex items-center gap-3 mb-5">
-          <span className="w-1.5 h-8 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
-          <h3 className="text-lg sm:text-xl font-serif font-bold text-foreground">
-            Collection Ly et Frédéric Dumas
-          </h3>
-        </div>
-        
-        <div className="space-y-4">
-          {heritageObjects.map((object, index) => (
-            <button
-              key={object.id}
-              onClick={() => navigate(`/objet/${object.id}`)}
-              className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex items-center hover:shadow-xl hover:border-primary/40 transition-all duration-500 group active:scale-[0.98] animate-slide-in-bottom"
-              style={{ animationDelay: `${index * 0.15}s` }}
-            >
-              {/* Image with gradient overlay */}
-              <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 overflow-hidden relative">
-                <img
-                  src={imageMap[object.image]}
-                  alt={object.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/20 group-hover:opacity-0 transition-opacity" />
-              </div>
-              
-              {/* Content */}
-              <div className="flex-1 p-4 sm:p-5 text-left">
-                <h4 className="font-serif font-bold text-foreground text-base sm:text-lg group-hover:text-primary transition-colors duration-300">
-                  {object.title}
-                </h4>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
-                  {object.subtitle}
-                </p>
-              </div>
-              
-              {/* Arrow with enhanced animation */}
-              <div className="mr-4 sm:mr-5 flex items-center justify-center w-10 h-10 rounded-full bg-muted/50 group-hover:bg-primary/10 transition-all duration-300">
-                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300" />
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Enhanced Footer */}
-      <div className="px-4 pb-24 md:pb-8">
-        <div className="relative py-8 border-t border-border/50">
-          {/* Decorative element */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded-full" />
-          
-          <div className="text-center">
-            <p className="text-sm font-medium text-foreground/80">
-              © 2025 Fondation Jean-Félicien Gacha
-            </p>
-            <p className="text-xs text-muted-foreground mt-2 italic">
-              « Susciter des vocations, développer les talents, transmettre les savoirs »
-            </p>
-          </div>
-        </div>
-      </div>
+      </ScrollReveal>
     </Layout>
   );
 };
