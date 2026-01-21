@@ -21,7 +21,7 @@ export const heritageObjects: HeritageObject[] = [
     image: "case-obus-mousgoum",
     ancestorName: "Esprit de la Case Obus",
     ancestorGreeting: "Je suis l'Esprit de la Case Obus Mousgoum, gardien des secrets de l'architecture de terre. Interroge-moi sur les techniques de construction ancestrales et la vie dans les plaines du Nord.",
-    // model3dUrl sera ajouté quand le vrai modèle 3D de la Case Obus sera disponible
+    model3dUrl: "/models/case-obus-mousgoum.glb"
   },
   {
     id: "sculpture-recyclee",
