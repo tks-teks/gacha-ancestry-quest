@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader2, RotateCcw, Maximize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import "@google/model-viewer";
@@ -18,24 +18,74 @@ export const Object3DViewer = ({
   alt,
   showARButton = true,
 }: Object3DViewerProps) => {
+  const viewerRef = useRef<HTMLElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [loadProgressPct, setLoadProgressPct] = useState<number | null>(null);
 
   useEffect(() => {
-    // Reset states when model changes
+    // NOTE: <model-viewer> is a Web Component; React's onLoad/onError are not
+    // reliably fired for custom elements. We attach DOM event listeners directly.
+    const el = viewerRef.current as any;
+    if (!el || !modelUrl) return;
+
     setIsLoading(true);
     setHasError(false);
+    setLoadProgressPct(0);
+
+    const safetyTimeoutMs = 90_000;
+    const timeoutId = window.setTimeout(() => {
+      setIsLoading(false);
+      setHasError(true);
+      setLoadProgressPct(null);
+    }, safetyTimeoutMs);
+
+    const onLoad = () => {
+      window.clearTimeout(timeoutId);
+      setIsLoading(false);
+      setHasError(false);
+      setLoadProgressPct(null);
+    };
+
+    const onError = () => {
+      window.clearTimeout(timeoutId);
+      setIsLoading(false);
+      setHasError(true);
+      setLoadProgressPct(null);
+    };
+
+    const onProgress = (event: any) => {
+      const totalProgress = event?.detail?.totalProgress;
+      if (typeof totalProgress === "number") {
+        const pct = Math.max(0, Math.min(100, Math.round(totalProgress * 100)));
+        setLoadProgressPct(pct);
+      }
+    };
+
+    el.addEventListener("load", onLoad);
+    el.addEventListener("error", onError);
+    el.addEventListener("progress", onProgress);
+
+    // Extra safety: some browsers/dev builds may render the model but never
+    // dispatch the custom-element 'load' event. If we detect the model is
+    // available, we stop the loading UI.
+    const pollId = window.setInterval(() => {
+      const current = viewerRef.current as any;
+      if (!current) return;
+      if (current.loaded === true || current.model) {
+        onLoad();
+      }
+    }, 250);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.clearInterval(pollId);
+      el.removeEventListener("load", onLoad);
+      el.removeEventListener("error", onError);
+      el.removeEventListener("progress", onProgress);
+    };
   }, [modelUrl]);
-
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
@@ -71,7 +121,7 @@ export const Object3DViewer = ({
           <div className="text-center">
             <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">
-              Chargement du modèle 3D...
+              Chargement du modèle 3D{typeof loadProgressPct === "number" ? `… ${loadProgressPct}%` : "…"}
             </p>
           </div>
         </div>
@@ -89,6 +139,7 @@ export const Object3DViewer = ({
 
       {/* 3D Model Viewer */}
       <model-viewer
+        ref={viewerRef as any}
         src={modelUrl}
         ios-src={iosModelUrl}
         poster={posterUrl}
@@ -114,8 +165,6 @@ export const Object3DViewer = ({
           backgroundColor: "transparent",
           "--poster-color": "transparent",
         } as React.CSSProperties}
-        onLoad={handleLoad}
-        onError={handleError}
       >
         {/* AR Button slot */}
         <button
