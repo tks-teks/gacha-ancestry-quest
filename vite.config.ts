@@ -41,7 +41,18 @@ export default defineConfig(({ mode }) => ({
       "react-dom/server",
       "react/jsx-runtime",
       "react/jsx-dev-runtime",
+      "@google/model-viewer",
     ],
     force: true,
+    esbuildOptions: {
+      // Force all packages to use a single React instance
+      plugins: [],
+    },
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
   },
 }));
