@@ -5,9 +5,11 @@ import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
 
 const QRCodes = () => {
+  // Use the published URL so QR codes work with external scanner apps
+  const PUBLISHED_URL = "https://gacha-ancestry-quest.lovable.app";
+  
   const generateQRCodeUrl = (objectId: string) => {
-    const baseUrl = window.location.origin;
-    const objectUrl = `${baseUrl}/objet/${objectId}`;
+    const objectUrl = `${PUBLISHED_URL}/objet/${objectId}`;
     return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(objectUrl)}`;
   };
 
@@ -93,7 +95,7 @@ const QRCodes = () => {
 
                 {/* Print-only URL */}
                 <p className="hidden print:block text-xs text-muted-foreground mt-2 break-all">
-                  {window.location.origin}/objet/{object.id}
+                  https://gacha-ancestry-quest.lovable.app/objet/{object.id}
                 </p>
               </CardContent>
             </Card>
