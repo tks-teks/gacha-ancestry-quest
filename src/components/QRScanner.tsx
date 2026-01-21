@@ -12,6 +12,7 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(true);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const isRunningRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,11 +42,14 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
           }
         );
 
+        isRunningRef.current = true;
+
         if (mounted) {
           setIsStarting(false);
         }
       } catch (err) {
         console.error("Scanner error:", err);
+        isRunningRef.current = false;
         if (mounted) {
           setIsStarting(false);
           if (err instanceof Error) {
@@ -67,8 +71,10 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
 
     return () => {
       mounted = false;
-      if (scannerRef.current) {
-        scannerRef.current.stop().catch(() => {
+      if (scannerRef.current && isRunningRef.current) {
+        scannerRef.current.stop().then(() => {
+          isRunningRef.current = false;
+        }).catch(() => {
           // Ignore stop errors
         });
       }
