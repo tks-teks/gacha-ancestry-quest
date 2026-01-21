@@ -182,6 +182,7 @@ const HeritageObject = () => {
               description: object.description,
               audioText: object.audioText,
               ancestorName: object.ancestorName,
+              extendedKnowledge: object.extendedKnowledge,
             }}
           />
         </div>

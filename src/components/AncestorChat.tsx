@@ -9,12 +9,22 @@ interface Message {
   content: string;
 }
 
+interface ExtendedKnowledge {
+  history: string;
+  techniques: string;
+  culturalSignificance: string;
+  dailyLife: string;
+  spirituality: string;
+  preservation: string;
+}
+
 interface ObjectContext {
   title: string;
   subtitle: string;
   description: string;
   audioText: string;
   ancestorName: string;
+  extendedKnowledge?: ExtendedKnowledge;
 }
 
 interface AncestorChatProps {
