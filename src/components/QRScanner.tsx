@@ -19,6 +19,11 @@ export const QRScanner = ({ onScan, onClose }: QRScannerProps) => {
     let mounted = true;
 
     const startScanner = async () => {
+      // Prevent duplicate initialization
+      if (scannerRef.current || isRunningRef.current) {
+        return;
+      }
+
       try {
         const scanner = new Html5Qrcode("qr-reader");
         scannerRef.current = scanner;
