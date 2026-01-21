@@ -18,7 +18,7 @@ export const objectAnnotations: ObjectAnnotations[] = [
     annotations: [
       {
         id: "sommet",
-        position: "0m 2.5m 0m",
+        position: "0m 1.4m 0m",
         normal: "0m 1m 0m",
         title: "Sommet ogivale",
         description:
@@ -26,23 +26,23 @@ export const objectAnnotations: ObjectAnnotations[] = [
       },
       {
         id: "nervures",
-        position: "0.8m 1.2m 0.8m",
-        normal: "1m 0m 1m",
+        position: "0.35m 0.7m 0.35m",
+        normal: "0.7m 0.2m 0.7m",
         title: "Nervures en relief",
         description:
           "Ces stries servent de marches pour grimper entretenir la case et de canaux pour guider l'eau de pluie vers le sol.",
       },
       {
         id: "base",
-        position: "0m 0.1m 1m",
-        normal: "0m 0m 1m",
+        position: "0.4m 0.05m 0.4m",
+        normal: "0.7m 0m 0.7m",
         title: "Base circulaire",
         description:
           "La forme ronde répartit les forces uniformément et résiste aux vents violents du Sahel.",
       },
       {
         id: "entree",
-        position: "0m 0.5m 1.2m",
+        position: "0m 0.25m 0.5m",
         normal: "0m 0m 1m",
         title: "Entrée basse",
         description:
