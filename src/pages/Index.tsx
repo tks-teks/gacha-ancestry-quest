@@ -49,108 +49,146 @@ const Index = () => {
         />
       )}
 
-      {/* Hero Section */}
-      <div className="relative h-[40vh] md:h-[50vh] overflow-hidden -mt-14">
-        <img
-          src={heroImage}
-          alt="Fondation Jean-Félicien Gacha - Bangoulap"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/10 to-background" />
+      {/* Hero Section with enhanced parallax effect */}
+      <div className="relative h-[45vh] md:h-[55vh] overflow-hidden -mt-14">
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt="Fondation Jean-Félicien Gacha - Bangoulap"
+            className="w-full h-full object-cover animate-zoom-slow"
+          />
+        </div>
+        
+        {/* Multi-layer gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 via-foreground/20 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        
+        {/* Decorative patterns */}
+        <div className="absolute inset-0 opacity-10" style={{
+          backgroundImage: 'radial-gradient(circle at 2px 2px, hsl(var(--primary)) 1px, transparent 0)',
+          backgroundSize: '32px 32px'
+        }} />
         
         {/* Logo/Title Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 pt-14">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-primary-foreground drop-shadow-lg mb-2 animate-fade-in">
-            Fondation Jean-Félicien Gacha
-          </h1>
-          <p className="text-sm sm:text-base text-primary-foreground/90 drop-shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            Bangoulap, Grassfields - Cameroun
-          </p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pt-14">
+          <div className="relative">
+            {/* Glow effect behind title */}
+            <div className="absolute inset-0 blur-3xl bg-primary/20 scale-150" />
+            <h1 className="relative text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary-foreground drop-shadow-2xl mb-3 animate-text-reveal tracking-wide">
+              Fondation Jean-Félicien Gacha
+            </h1>
+          </div>
+          <div className="flex items-center gap-2 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <span className="w-8 h-px bg-primary-foreground/60" />
+            <p className="text-sm sm:text-base md:text-lg text-primary-foreground/90 drop-shadow-lg font-light tracking-widest uppercase">
+              Bangoulap, Grassfields
+            </p>
+            <span className="w-8 h-px bg-primary-foreground/60" />
+          </div>
         </div>
       </div>
 
-      {/* Welcome Section */}
-      <div className="px-4 py-8 -mt-16 relative z-10">
-        <div className="bg-card rounded-xl shadow-xl p-6 border border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Compass className="w-6 h-6 text-primary" />
+      {/* Welcome Section with floating card */}
+      <div className="px-4 py-8 -mt-20 relative z-10">
+        <div className="bg-card/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 border border-border/50 relative overflow-hidden">
+          {/* Decorative corner accent */}
+          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
+          <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-primary/5 to-transparent rounded-tr-full" />
+          
+          <div className="relative flex items-center gap-4 mb-5">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg animate-glow-pulse">
+              <Compass className="w-7 h-7 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="text-xl font-serif font-bold text-foreground">
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground">
                 Bienvenue, explorateur
               </h2>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground font-medium">
                 Centre des Cultures JLD
               </p>
             </div>
           </div>
           
-          <p className="text-foreground mb-6 leading-relaxed">
+          <p className="text-foreground/90 mb-6 leading-relaxed text-sm sm:text-base">
             Créée en 2002 par Ly Dumas pour honorer la mémoire de son père Jean-Félicien Gacha (1922-1972), 
             la Fondation préserve et transmet le patrimoine culturel des Grassfields. 
-            Scannez les QR codes pour dialoguer avec les esprits ancestraux.
+            <span className="text-primary font-medium"> Scannez les QR codes</span> pour dialoguer avec les esprits ancestraux.
           </p>
           
-          {/* Action button */}
+          {/* Enhanced action button */}
           <Button
             variant="scanner"
             size="xl"
-            className="w-full"
+            className="w-full group relative overflow-hidden"
             onClick={() => setShowScanner(true)}
           >
-            <QrCode className="w-5 h-5 mr-2" />
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+            <QrCode className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
             Scanner un QR code
           </Button>
         </div>
       </div>
 
-
-      {/* Collection Preview */}
-      <div className="px-4 pb-6">
-        <h3 className="text-lg font-serif font-bold text-foreground mb-4 flex items-center gap-2">
-          <span className="w-1 h-6 bg-primary rounded-full" />
-          Collection Ly et Frédéric Dumas
-        </h3>
+      {/* Collection Preview with enhanced cards */}
+      <div className="px-4 pb-8">
+        <div className="flex items-center gap-3 mb-5">
+          <span className="w-1.5 h-8 bg-gradient-to-b from-primary to-primary/50 rounded-full" />
+          <h3 className="text-lg sm:text-xl font-serif font-bold text-foreground">
+            Collection Ly et Frédéric Dumas
+          </h3>
+        </div>
         
-        <div className="space-y-3">
+        <div className="space-y-4">
           {heritageObjects.map((object, index) => (
             <button
               key={object.id}
               onClick={() => navigate(`/objet/${object.id}`)}
-              className="w-full bg-card rounded-xl shadow-md border border-border overflow-hidden flex items-center hover:shadow-lg hover:border-primary/30 transition-all duration-300 group active:scale-[0.98]"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex items-center hover:shadow-xl hover:border-primary/40 transition-all duration-500 group active:scale-[0.98] animate-slide-in-bottom"
+              style={{ animationDelay: `${index * 0.15}s` }}
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 overflow-hidden">
+              {/* Image with gradient overlay */}
+              <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 overflow-hidden relative">
                 <img
                   src={imageMap[object.image]}
                   alt={object.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/20 group-hover:opacity-0 transition-opacity" />
               </div>
-              <div className="flex-1 p-3 sm:p-4 text-left">
-                <h4 className="font-serif font-bold text-foreground text-sm sm:text-base">
+              
+              {/* Content */}
+              <div className="flex-1 p-4 sm:p-5 text-left">
+                <h4 className="font-serif font-bold text-foreground text-base sm:text-lg group-hover:text-primary transition-colors duration-300">
                   {object.title}
                 </h4>
-                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
                   {object.subtitle}
                 </p>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground mr-3 sm:mr-4 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+              
+              {/* Arrow with enhanced animation */}
+              <div className="mr-4 sm:mr-5 flex items-center justify-center w-10 h-10 rounded-full bg-muted/50 group-hover:bg-primary/10 transition-all duration-300">
+                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300" />
+              </div>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-4 pb-6">
-        <div className="text-center py-6 border-t border-border">
-          <p className="text-sm text-muted-foreground">
-            © 2025 Fondation Jean-Félicien Gacha
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Susciter des vocations, développer les talents, transmettre les savoirs
-          </p>
+      {/* Enhanced Footer */}
+      <div className="px-4 pb-24 md:pb-8">
+        <div className="relative py-8 border-t border-border/50">
+          {/* Decorative element */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded-full" />
+          
+          <div className="text-center">
+            <p className="text-sm font-medium text-foreground/80">
+              © 2025 Fondation Jean-Félicien Gacha
+            </p>
+            <p className="text-xs text-muted-foreground mt-2 italic">
+              « Susciter des vocations, développer les talents, transmettre les savoirs »
+            </p>
+          </div>
         </div>
       </div>
     </Layout>
