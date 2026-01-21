@@ -15,39 +15,16 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     // Prevent "Invalid hook call" by forcing a single React instance.
-    dedupe: [
-      "react",
-      "react-dom",
-      "react-dom/client",
-      "react-dom/server",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-    ],
+    // IMPORTANT: avoid filesystem aliasing for React here, as it can create
+    // two different module identities (optimized deps vs /@fs/ paths).
+    dedupe: ["react", "react-dom"],
     alias: {
-      react: path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
-      "react-dom/client": path.resolve(__dirname, "./node_modules/react-dom/client"),
-      "react-dom/server": path.resolve(__dirname, "./node_modules/react-dom/server"),
-      "react/jsx-runtime": path.resolve(__dirname, "./node_modules/react/jsx-runtime"),
-      "react/jsx-dev-runtime": path.resolve(__dirname, "./node_modules/react/jsx-dev-runtime"),
       "@": path.resolve(__dirname, "./src"),
     },
   },
   optimizeDeps: {
-    include: [
-      "react",
-      "react-dom",
-      "react-dom/client",
-      "react-dom/server",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-      "@google/model-viewer",
-    ],
+    include: ["@google/model-viewer"],
     force: true,
-    esbuildOptions: {
-      // Force all packages to use a single React instance
-      plugins: [],
-    },
   },
   build: {
     commonjsOptions: {
