@@ -224,10 +224,12 @@ interface SculptureRecyclee3DProps {
 
 export const SculptureRecyclee3D = ({ className }: SculptureRecyclee3DProps) => {
   return (
-    <div className={`w-full h-64 sm:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-amber-900/20 to-stone-900/40 ${className || ""}`}>
+    <div className={`w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden bg-gradient-to-br from-amber-900/20 to-stone-900/40 touch-manipulation ${className || ""}`}>
       <Canvas
         camera={{ position: [2, 1.5, 2], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
+        dpr={[1, 2]}
+        style={{ touchAction: "pan-y" }}
       >
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
@@ -240,6 +242,10 @@ export const SculptureRecyclee3D = ({ className }: SculptureRecyclee3DProps) => 
           maxDistance={5}
           autoRotate
           autoRotateSpeed={0.5}
+          touches={{
+            ONE: THREE.TOUCH.ROTATE,
+            TWO: THREE.TOUCH.DOLLY_ROTATE,
+          }}
         />
         <Environment preset="sunset" />
       </Canvas>

@@ -47,51 +47,51 @@ const HeritageObject = () => {
 
   return (
     <Layout showHeader={false}>
-      {/* Hero Image with Parallax */}
-      <div className="relative h-72 sm:h-80 overflow-hidden">
+      {/* Hero Image with Parallax - Optimized for mobile */}
+      <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
         <ParallaxImage
           src={imageMap[object.image]}
           alt={object.title}
           className="h-full"
         />
         
-        {/* Back Button */}
+        {/* Back Button - Larger touch target for mobile */}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate("/")}
-          className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm hover:bg-background/90 z-10 animate-fade-in"
+          className="absolute top-4 left-4 w-11 h-11 bg-background/80 backdrop-blur-sm hover:bg-background/90 z-10 animate-fade-in shadow-lg"
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
 
-        {/* Floating badge */}
-        <div className="absolute bottom-6 right-4 z-10">
-          <div className="flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-4 py-2 rounded-full shadow-lg animate-float">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Expérience AR</span>
+        {/* Floating AR badge - Better mobile positioning */}
+        <div className="absolute bottom-4 right-4 z-10">
+          <div className="flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-lg animate-float">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="text-xs sm:text-sm font-medium">Expérience AR</span>
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="px-4 pb-8 -mt-10 relative z-10">
-        {/* Title Card */}
-        <div className="bg-card rounded-xl shadow-lg p-5 sm:p-6 mb-6 border border-border">
+      {/* Content - Improved mobile spacing */}
+      <div className="px-3 sm:px-4 pb-24 md:pb-8 -mt-8 relative z-10">
+        {/* Title Card - Better mobile typography */}
+        <div className="bg-card rounded-xl shadow-lg p-4 sm:p-5 md:p-6 mb-4 sm:mb-6 border border-border">
           <h1 
-            className="text-2xl sm:text-3xl font-serif font-bold text-foreground mb-2 animate-slide-up"
+            className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-foreground mb-1.5 sm:mb-2 animate-slide-up leading-tight"
           >
             {object.title}
           </h1>
           <p 
-            className="text-primary font-medium mb-4 animate-slide-up"
+            className="text-sm sm:text-base text-primary font-medium mb-3 sm:mb-4 animate-slide-up"
             style={{ animationDelay: "0.1s" }}
           >
             {object.subtitle}
           </p>
           
           {/* Animated decorative line */}
-          <div className="relative h-0.5 bg-border rounded-full mb-6 overflow-hidden">
+          <div className="relative h-0.5 bg-border rounded-full mb-4 sm:mb-6 overflow-hidden">
             <div 
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-accent animate-highlight"
               style={{ animationDelay: "0.3s" }}
@@ -103,17 +103,17 @@ const HeritageObject = () => {
           </div>
         </div>
 
-        {/* Photo Gallery Section */}
+        {/* Photo Gallery Section - Compact on mobile */}
         {galleryImages.length > 0 && (
           <div 
-            className="bg-card rounded-xl shadow-lg p-4 sm:p-5 mb-6 border border-border animate-fade-in"
+            className="bg-card rounded-xl shadow-lg p-3 sm:p-4 md:p-5 mb-4 sm:mb-6 border border-border animate-fade-in"
             style={{ animationDelay: "0.25s" }}
           >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-                <Images className="w-4 h-4 text-accent" />
+            <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-accent/20 flex items-center justify-center">
+                <Images className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
               </div>
-              <h2 className="text-lg font-serif font-semibold text-foreground">
+              <h2 className="text-base sm:text-lg font-serif font-semibold text-foreground">
                 Galerie Photos
               </h2>
             </div>
@@ -121,17 +121,17 @@ const HeritageObject = () => {
           </div>
         )}
 
-        {/* 3D Viewer Section */}
+        {/* 3D Viewer Section - Full-width and taller on mobile for better AR */}
         <div 
-          className="bg-card rounded-xl shadow-lg p-4 sm:p-5 mb-6 border border-border animate-scale-in"
+          className="bg-card rounded-xl shadow-lg p-3 sm:p-4 md:p-5 mb-4 sm:mb-6 border border-border animate-scale-in"
           style={{ animationDelay: "0.3s" }}
         >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary/20 flex items-center justify-center">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
             </div>
-            <h2 className="text-lg font-serif font-semibold text-foreground">
-              Visualisation 3D & Réalité Augmentée
+            <h2 className="text-base sm:text-lg font-serif font-semibold text-foreground">
+              3D & Réalité Augmentée
             </h2>
           </div>
           
@@ -149,25 +149,25 @@ const HeritageObject = () => {
             />
           )}
           
-          <p className="text-xs text-muted-foreground text-center mt-3">
-            Faites glisser pour faire tourner • Pincez pour zoomer{object.id !== "sculpture-recyclee" && " • Cliquez sur les points \"?\" pour les annotations"}
+          <p className="text-[11px] sm:text-xs text-muted-foreground text-center mt-2.5 sm:mt-3 leading-relaxed">
+            Glissez pour tourner • Pincez pour zoomer{object.id !== "sculpture-recyclee" && " • Touchez \"?\" pour les détails"}
           </p>
         </div>
 
-        {/* Description Section */}
+        {/* Description Section - Improved readability */}
         <div 
-          className="bg-card rounded-xl shadow-lg p-5 sm:p-6 mb-6 border border-border"
+          className="bg-card rounded-xl shadow-lg p-4 sm:p-5 md:p-6 mb-4 sm:mb-6 border border-border"
         >
-          <h2 className="text-lg font-serif font-semibold text-foreground mb-4 flex items-center gap-2">
-            <span className="w-1 h-6 bg-primary rounded-full" />
+          <h2 className="text-base sm:text-lg font-serif font-semibold text-foreground mb-3 sm:mb-4 flex items-center gap-2">
+            <span className="w-1 h-5 sm:h-6 bg-primary rounded-full" />
             À propos de cet objet
           </h2>
           
           <AnimatedDescription text={object.description} />
         </div>
 
-        {/* Guestbook */}
-        <div className="animate-fade-in mb-6" style={{ animationDelay: "0.4s" }}>
+        {/* Guestbook - Better mobile spacing */}
+        <div className="animate-fade-in mb-4 sm:mb-6" style={{ animationDelay: "0.4s" }}>
           <Guestbook objectId={object.id} objectTitle={object.title} />
         </div>
 
