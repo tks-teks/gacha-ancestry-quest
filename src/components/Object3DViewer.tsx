@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader2, RotateCcw, Maximize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import "@google/model-viewer";
@@ -21,21 +21,55 @@ export const Object3DViewer = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const viewerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Reset states when model changes
     setIsLoading(true);
     setHasError(false);
+    setProgress(0);
   }, [modelUrl]);
 
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    const el = viewerRef.current as any;
+    if (!el) return;
 
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
+    // React 18 doesn't reliably wire custom-element events through JSX props.
+    // We attach DOM listeners directly to ensure the loader is dismissed.
+    const onLoad = () => setIsLoading(false);
+    const onError = () => {
+      setIsLoading(false);
+      setHasError(true);
+    };
+    const onProgress = (event: any) => {
+      const p = typeof event?.detail?.totalProgress === "number" ? event.detail.totalProgress : 0;
+      setProgress(p);
+      if (p >= 1) setIsLoading(false);
+    };
+
+    el.addEventListener("load", onLoad);
+    el.addEventListener("error", onError);
+    el.addEventListener("progress", onProgress);
+
+    // If the model is already loaded when we attach listeners, dismiss immediately.
+    if (el.loaded === true) setIsLoading(false);
+
+    // Safety net: if something goes wrong and events never fire, stop infinite loading.
+    const timeoutId = window.setTimeout(() => {
+      if (el.loaded !== true) {
+        setIsLoading(false);
+        setHasError(true);
+      }
+    }, 90000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      el.removeEventListener("load", onLoad);
+      el.removeEventListener("error", onError);
+      el.removeEventListener("progress", onProgress);
+    };
+  }, [modelUrl]);
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
@@ -71,7 +105,7 @@ export const Object3DViewer = ({
           <div className="text-center">
             <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">
-              Chargement du modèle 3D...
+              Chargement du modèle 3D{progress > 0 ? ` • ${Math.round(progress * 100)}%` : "..."}
             </p>
           </div>
         </div>
@@ -89,6 +123,7 @@ export const Object3DViewer = ({
 
       {/* 3D Model Viewer */}
       <model-viewer
+        ref={viewerRef as any}
         src={modelUrl}
         ios-src={iosModelUrl}
         poster={posterUrl}
@@ -114,8 +149,6 @@ export const Object3DViewer = ({
           backgroundColor: "transparent",
           "--poster-color": "transparent",
         } as React.CSSProperties}
-        onLoad={handleLoad}
-        onError={handleError}
       >
         {/* AR Button slot */}
         <button
