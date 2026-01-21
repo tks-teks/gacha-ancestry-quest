@@ -176,11 +176,14 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
         ))}
         {isLoading && displayMessages[displayMessages.length - 1]?.content === "" && (
           <div className="flex justify-start">
-            <div className="bg-accent text-accent-foreground border border-primary/20 rounded-lg px-4 py-2">
-              <div className="flex gap-1">
-                <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+            <div className="bg-accent text-accent-foreground border border-primary/20 rounded-lg px-4 py-3">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
+                <span className="text-xs text-muted-foreground ml-1">L'ancêtre médite...</span>
               </div>
             </div>
           </div>
