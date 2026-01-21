@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QrCode, Compass, ChevronRight, Map, Play } from "lucide-react";
+import { QrCode, Compass, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QRScanner } from "@/components/QRScanner";
 import { Layout } from "@/components/Layout";
 import { heritageObjects } from "@/data/heritageObjects";
-import { guidedTours } from "@/data/guidedTours";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-fondation.jpg";
 import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
@@ -93,50 +92,19 @@ const Index = () => {
             Scannez les QR codes pour dialoguer avec les esprits ancestraux.
           </p>
           
-          {/* Action buttons */}
-          <div className="flex gap-3">
-            <Button
-              variant="scanner"
-              size="xl"
-              className="flex-1"
-              onClick={() => setShowScanner(true)}
-            >
-              <QrCode className="w-5 h-5 mr-2" />
-              Scanner
-            </Button>
-            <Button
-              variant="outline"
-              size="xl"
-              className="flex-1"
-              onClick={() => navigate("/parcours")}
-            >
-              <Map className="w-5 h-5 mr-2" />
-              Parcours
-            </Button>
-          </div>
+          {/* Action button */}
+          <Button
+            variant="scanner"
+            size="xl"
+            className="w-full"
+            onClick={() => setShowScanner(true)}
+          >
+            <QrCode className="w-5 h-5 mr-2" />
+            Scanner un QR code
+          </Button>
         </div>
       </div>
 
-      {/* Featured Tour */}
-      <div className="px-4 pb-4">
-        <button
-          onClick={() => navigate("/parcours")}
-          className="w-full bg-gradient-to-r from-primary to-accent rounded-xl p-4 text-primary-foreground text-left hover:shadow-lg transition-shadow"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                <Play className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-serif font-bold">{guidedTours[0]?.title}</p>
-                <p className="text-primary-foreground/80 text-sm">{guidedTours[0]?.duration} • {guidedTours[0]?.stops.length} étapes</p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5" />
-          </div>
-        </button>
-      </div>
 
       {/* Collection Preview */}
       <div className="px-4 pb-6">
