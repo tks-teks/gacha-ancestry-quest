@@ -5,6 +5,9 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Use a dedicated Vite cache directory to avoid stale/corrupted optimized
+  // dependency graphs that can cause "Invalid hook call" (dispatcher=null).
+  cacheDir: "node_modules/.vite-lovable",
   server: {
     host: "::",
     port: 8080,
@@ -30,19 +33,12 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    // Pre-bundle React runtimes as well to avoid duplicated module graphs
-    // that can lead to dispatcher=null (useState/useContext) at runtime.
-    include: [
-      "react",
-      "react-dom",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-      "react-dom/client",
-      "react-dom/server",
-      "next-themes",
-      "sonner",
-      "@google/model-viewer",
-    ],
+    // NOTE: Do not force-prebundle React itself. In Vite dev + HMR this can
+    // lead to multiple optimized module graphs (different ?v= hashes) living
+    // side-by-side, which manifests as dispatcher=null (useState/useContext).
+    // Keep React out of pre-bundling; pre-bundle only what truly needs it.
+    include: ["@google/model-viewer"],
+    exclude: ["react", "react-dom", "next-themes", "sonner"],
     force: true,
   },
   build: {
