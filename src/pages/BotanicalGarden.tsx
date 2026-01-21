@@ -2,12 +2,23 @@ import { Leaf, Sparkles, Heart, Shield } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import jardinBotaniqueImage from "@/assets/jardin-botanique.jpg";
 
+// Plant images
+import neemImage from "@/assets/plants/neem.jpg";
+import artemisiaImage from "@/assets/plants/artemisia.jpg";
+import moringaImage from "@/assets/plants/moringa.jpg";
+import kinkelihaImage from "@/assets/plants/kinkeliba.jpg";
+import eucalyptusImage from "@/assets/plants/eucalyptus.jpg";
+import aloeImage from "@/assets/plants/aloe.jpg";
+import colaImage from "@/assets/plants/cola.jpg";
+import gingembreImage from "@/assets/plants/gingembre.jpg";
+
 interface MedicinalPlant {
   id: string;
   name: string;
   scientificName: string;
   uses: string[];
   category: "digestif" | "respiratoire" | "douleur" | "peau" | "spirituel";
+  image: string;
 }
 
 const medicinalPlants: MedicinalPlant[] = [
@@ -17,6 +28,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Azadirachta indica",
     uses: ["Antipaludéen", "Antibactérien", "Soins de la peau"],
     category: "peau",
+    image: neemImage,
   },
   {
     id: "artemisia",
@@ -24,6 +36,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Artemisia afra",
     uses: ["Fièvre", "Toux", "Troubles digestifs"],
     category: "respiratoire",
+    image: artemisiaImage,
   },
   {
     id: "moringa",
@@ -31,6 +44,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Moringa oleifera",
     uses: ["Nutrition", "Énergie", "Immunité"],
     category: "digestif",
+    image: moringaImage,
   },
   {
     id: "kinkeliba",
@@ -38,6 +52,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Combretum micranthum",
     uses: ["Détox", "Digestion", "Minceur"],
     category: "digestif",
+    image: kinkelihaImage,
   },
   {
     id: "eucalyptus",
@@ -45,6 +60,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Eucalyptus globulus",
     uses: ["Rhumes", "Bronchite", "Antiseptique"],
     category: "respiratoire",
+    image: eucalyptusImage,
   },
   {
     id: "aloe",
@@ -52,6 +68,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Aloe vera",
     uses: ["Brûlures", "Cicatrisation", "Hydratation"],
     category: "peau",
+    image: aloeImage,
   },
   {
     id: "cola",
@@ -59,6 +76,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Cola acuminata",
     uses: ["Stimulant", "Cérémonies", "Fatigue"],
     category: "spirituel",
+    image: colaImage,
   },
   {
     id: "gingembre",
@@ -66,6 +84,7 @@ const medicinalPlants: MedicinalPlant[] = [
     scientificName: "Zingiber officinale",
     uses: ["Nausées", "Douleurs", "Inflammation"],
     category: "douleur",
+    image: gingembreImage,
   },
 ];
 
@@ -145,7 +164,7 @@ const BotanicalGarden = () => {
           Plantes emblématiques
         </h3>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {medicinalPlants.map((plant, index) => {
             const config = categoryConfig[plant.category];
             const IconComponent = config.icon;
@@ -153,30 +172,46 @@ const BotanicalGarden = () => {
             return (
               <div
                 key={plant.id}
-                className="bg-card rounded-xl p-4 border border-border shadow-sm animate-fade-in hover:shadow-md hover:border-primary/30 transition-all duration-300"
+                className="bg-card rounded-xl overflow-hidden border border-border shadow-sm animate-fade-in hover:shadow-md hover:border-primary/30 transition-all duration-300 group"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                    <IconComponent className="w-5 h-5 text-primary" />
+                {/* Plant Image */}
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src={plant.image}
+                    alt={plant.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+                  
+                  {/* Category badge */}
+                  <div className="absolute top-2 right-2 bg-background/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+                    <IconComponent className="w-3 h-3 text-primary" />
+                    <span className="text-xs text-foreground font-medium">{config.label}</span>
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-serif font-bold text-foreground">
+                  
+                  {/* Plant name overlay */}
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <h4 className="font-serif font-bold text-primary-foreground drop-shadow-lg">
                       {plant.name}
                     </h4>
-                    <p className="text-xs text-muted-foreground italic mb-2">
+                    <p className="text-xs text-primary-foreground/80 italic drop-shadow-md">
                       {plant.scientificName}
                     </p>
-                    <div className="flex flex-wrap gap-1">
-                      {plant.uses.map((use) => (
-                        <span
-                          key={use}
-                          className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"
-                        >
-                          {use}
-                        </span>
-                      ))}
-                    </div>
+                  </div>
+                </div>
+                
+                {/* Uses */}
+                <div className="p-3">
+                  <div className="flex flex-wrap gap-1">
+                    {plant.uses.map((use) => (
+                      <span
+                        key={use}
+                        className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"
+                      >
+                        {use}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
