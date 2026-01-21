@@ -5,6 +5,7 @@ import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { Layout } from "@/components/Layout";
 import { Object3DViewer } from "@/components/Object3DViewer";
+import { SculptureRecyclee3D } from "@/components/SculptureRecyclee3D";
 import { AnimatedDescription } from "@/components/AnimatedDescription";
 import { ParallaxImage } from "@/components/ParallaxImage";
 import { ImageGallery } from "@/components/ImageGallery";
@@ -134,17 +135,22 @@ const HeritageObject = () => {
             </h2>
           </div>
           
-          <Object3DViewer
-            modelUrl={object.model3dUrl}
-            iosModelUrl={object.iosModelUrl}
-            posterUrl={imageMap[object.image]}
-            alt={object.title}
-            showARButton={true}
-            annotations={annotations}
-          />
+          {/* Use procedural 3D for sculpture-recyclee, model-viewer for others */}
+          {object.id === "sculpture-recyclee" ? (
+            <SculptureRecyclee3D />
+          ) : (
+            <Object3DViewer
+              modelUrl={object.model3dUrl}
+              iosModelUrl={object.iosModelUrl}
+              posterUrl={imageMap[object.image]}
+              alt={object.title}
+              showARButton={true}
+              annotations={annotations}
+            />
+          )}
           
           <p className="text-xs text-muted-foreground text-center mt-3">
-            Faites glisser pour faire tourner • Pincez pour zoomer • Cliquez sur les points "?" pour les annotations
+            Faites glisser pour faire tourner • Pincez pour zoomer{object.id !== "sculpture-recyclee" && " • Cliquez sur les points \"?\" pour les annotations"}
           </p>
         </div>
 
