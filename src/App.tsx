@@ -9,6 +9,7 @@ import About from "./pages/About";
 import QRCodes from "./pages/QRCodes";
 import HeritageHouses from "./pages/HeritageHouses";
 import BotanicalGarden from "./pages/BotanicalGarden";
+import Brochure from "./pages/Brochure";
 
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +28,7 @@ const App = () => (
         <Route path="/qr-codes" element={<QRCodes />} />
         <Route path="/maisons-patrimoine" element={<HeritageHouses />} />
         <Route path="/jardin-botanique" element={<BotanicalGarden />} />
+        <Route path="/brochure" element={<Brochure />} />
         
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
