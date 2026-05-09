@@ -1,0 +1,16 @@
+{
+  "name": "Fondation Gacha — Patrimoine Vivant",
+  "short_name": "Fondation Gacha",
+  "description": "Explorez le patrimoine culturel des Grassfields en réalité augmentée.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f5f5",
+  "theme_color": "#e8731a",
+  "icons": [
+    { "src": "/app-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
