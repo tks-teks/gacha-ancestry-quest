@@ -15,9 +15,14 @@ export const Layout = ({
   showBottomNav = true,
 }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-background bg-aurora">
+    <div className="min-h-[100svh] bg-background bg-aurora overflow-x-hidden">
+      {/* Floating ambient orbs */}
+      <div className="orb orb-gold" aria-hidden="true" />
+      <div className="orb orb-violet" aria-hidden="true" />
+      <div className="orb orb-green" aria-hidden="true" />
+
       {showHeader && <Header />}
-      <main className="animate-fade-in">{children}</main>
+      <main role="main" className="animate-fade-in relative z-10">{children}</main>
       {showBottomNav && <BottomNav />}
       <InstallPrompt />
     </div>
