@@ -142,39 +142,58 @@ const Index = () => {
             </h3>
           </div>
           
-          <StaggerReveal className="space-y-4" staggerDelay={0.15} direction="up">
-            {heritageObjects.map((object) => (
-              <button
-                key={object.id}
-                onClick={() => navigate(`/objet/${object.id}`)}
-                className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex items-center hover:shadow-xl hover:border-primary/40 transition-all duration-500 group active:scale-[0.98]"
-              >
-                {/* Image with gradient overlay */}
-                <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 overflow-hidden relative">
-                  <img
-                    src={imageMap[object.image]}
-                    alt={object.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/20 group-hover:opacity-0 transition-opacity" />
-                </div>
-                
-                {/* Content */}
-                <div className="flex-1 p-4 sm:p-5 text-left">
-                  <h4 className="font-serif font-bold text-foreground text-base sm:text-lg group-hover:text-primary transition-colors duration-300">
-                    {object.title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
-                    {object.subtitle}
-                  </p>
-                </div>
-                
-                {/* Arrow with enhanced animation */}
-                <div className="mr-4 sm:mr-5 flex items-center justify-center w-10 h-10 rounded-full bg-muted/50 group-hover:bg-primary/10 transition-all duration-300">
-                  <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300" />
-                </div>
-              </button>
-            ))}
+          <StaggerReveal
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            staggerDelay={0.12}
+            direction="up"
+          >
+            {heritageObjects.map((object, idx) => {
+              const rarity =
+                idx === 0 ? "rarity-legendary" : idx === 1 ? "rarity-rare" : "rarity-common";
+              const rarityLabel =
+                idx === 0 ? "Légendaire" : idx === 1 ? "Rare" : "Commun";
+              return (
+                <button
+                  key={object.id}
+                  onClick={() => navigate(`/objet/${object.id}`)}
+                  className={`gacha-glow ${rarity} tilt-3d group relative w-full bg-card rounded-2xl shadow-lg overflow-hidden text-left active:scale-[0.98] transition-shadow duration-300 touch-target`}
+                >
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={imageMap[object.image]}
+                      alt={object.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
+                    {/* Rarity badge */}
+                    <span className="absolute top-2 right-2 z-10 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full glass-strong text-foreground border border-border/50 shadow-md">
+                      <Sparkles className="inline w-3 h-3 mr-1 text-primary" />
+                      {rarityLabel}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative p-4 sm:p-5">
+                    <h4 className="font-serif font-bold text-foreground text-base sm:text-lg group-hover:text-primary transition-colors duration-300 line-clamp-1">
+                      {object.title}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
+                      {object.subtitle}
+                    </p>
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-xs font-medium text-primary/80 uppercase tracking-wider">
+                        Découvrir
+                      </span>
+                      <div className="flex items-center justify-center w-9 h-9 rounded-full bg-muted/50 group-hover:bg-primary/15 transition-all duration-300">
+                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </StaggerReveal>
         </div>
       </ScrollReveal>
