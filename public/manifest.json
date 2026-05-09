@@ -1,16 +1,23 @@
 {
-  "name": "Fondation Gacha — Patrimoine Vivant",
-  "short_name": "Fondation Gacha",
-  "description": "Explorez le patrimoine culturel des Grassfields en réalité augmentée.",
+  "name": "Fondation Jean-Félicien Gacha — Patrimoine Vivant",
+  "short_name": "Gacha Patrimoine",
+  "description": "Explorez le patrimoine camerounais en réalité augmentée",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f5f5f5",
-  "theme_color": "#e8731a",
+  "orientation": "portrait-primary",
+  "background_color": "#0d1117",
+  "theme_color": "#f59a0c",
+  "lang": "fr",
+  "categories": ["education", "lifestyle", "art"],
   "icons": [
     { "src": "/app-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Scanner un QR", "url": "/?action=scan", "description": "Ouvrir le scanner" },
+    { "name": "Collection", "url": "/", "description": "Voir les objets patrimoine" },
+    { "name": "Jardin botanique", "url": "/jardin-botanique", "description": "Plantes médicinales" }
   ]
 }

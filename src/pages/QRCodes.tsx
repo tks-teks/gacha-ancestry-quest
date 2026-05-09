@@ -66,15 +66,19 @@ const QRCodes = () => {
           {heritageObjects.map((object, index) => (
             <Card 
               key={object.id} 
-              className="bg-card border-border print:break-inside-avoid print:border-2 animate-fade-in hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+              className="glass-card border-border/60 print:break-inside-avoid print:border-2 animate-fade-in hover:shadow-xl hover:border-primary/40 transition-all duration-300"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardContent className="p-4 sm:p-6 flex flex-col items-center">
-                <img
-                  src={generateQRCodeUrl(object.id)}
-                  alt={`QR Code pour ${object.title}`}
-                  className="w-32 h-32 sm:w-40 sm:h-40 mb-4"
-                />
+                <div className="rounded-xl bg-white p-2 mb-4 shadow-md">
+                  <img
+                    src={generateQRCodeUrl(object.id)}
+                    alt={`QR Code pour ${object.title}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-32 h-32 sm:w-40 sm:h-40 block"
+                  />
+                </div>
                 <h3 className="font-serif font-bold text-foreground text-center mb-1">
                   {object.title}
                 </h3>
@@ -87,6 +91,7 @@ const QRCodes = () => {
                   onClick={() => handleDownload(object.id, object.title)}
                   variant="outline"
                   size="sm"
+                  aria-label={`Télécharger le QR de ${object.title}`}
                   className="print:hidden"
                 >
                   <Download className="h-4 w-4 mr-2" />

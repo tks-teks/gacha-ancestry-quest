@@ -164,7 +164,7 @@ const BotanicalGarden = () => {
           Plantes emblématiques
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {medicinalPlants.map((plant, index) => {
             const config = categoryConfig[plant.category];
             const IconComponent = config.icon;
@@ -180,6 +180,8 @@ const BotanicalGarden = () => {
                   <img
                     src={plant.image}
                     alt={plant.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />

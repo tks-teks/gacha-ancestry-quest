@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Sparkles, Images } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,9 +11,11 @@ import { AnimatedDescription } from "@/components/AnimatedDescription";
 import { ParallaxImage } from "@/components/ParallaxImage";
 import { ImageGallery } from "@/components/ImageGallery";
 import { Guestbook } from "@/components/Guestbook";
-import { getHeritageObject } from "@/data/heritageObjects";
+import { getHeritageObject, heritageObjects } from "@/data/heritageObjects";
 import { getHeritageGallery } from "@/data/heritageGalleries";
 import { getObjectAnnotations } from "@/data/annotations3D";
+import { useCollection, BADGE_INFO } from "@/hooks/useCollection";
+import { toast } from "sonner";
 import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
 import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
 
@@ -27,6 +30,20 @@ const HeritageObject = () => {
   const object = getHeritageObject(id || "");
   const galleryImages = getHeritageGallery(id || "");
   const annotations = getObjectAnnotations(id || "");
+  const { discover } = useCollection(heritageObjects.length);
+
+  useEffect(() => {
+    if (!object) return;
+    const { isNew, newBadges } = discover(object.id);
+    if (isNew) {
+      toast.success(`✨ Nouvel objet découvert : ${object.title}`);
+      newBadges.forEach(b => {
+        const info = BADGE_INFO[b];
+        if (info) setTimeout(() => toast(`${info.emoji} Badge : ${info.label}`), 600);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [object?.id]);
 
   if (!object) {
     return (
