@@ -365,29 +365,30 @@ export const Object3DViewer = ({
         {/* 3D Model Viewer */}
         <model-viewer
           ref={viewerRef as any}
-          src={modelUrl}
-          ios-src={iosModelUrl}
+          src={effectiveModelUrl}
+          ios-src={config.usdz}
           poster={posterUrl}
           alt={alt}
           ar={showARButton}
           ar-modes="webxr scene-viewer quick-look"
-          ar-scale="fixed"
-          ar-placement="floor"
-          xr-environment
+          ar-scale={config.arScale}
+          ar-placement={config.arPlacement}
+          {...(config.xrEnvironment ? { "xr-environment": "" } : {})}
           camera-controls
           touch-action="pan-y"
           auto-rotate
           rotation-per-second="25deg"
           interaction-prompt="none"
-          shadow-intensity="1.5"
-          shadow-softness="1"
-          exposure="1.1"
+          shadow-intensity={String(config.shadowIntensity)}
+          shadow-softness={String(config.shadowSoftness)}
+          exposure={String(config.exposure)}
           loading="eager"
           reveal="auto"
           camera-orbit="0deg 75deg 105%"
           min-camera-orbit="auto auto 60%"
           max-camera-orbit="auto auto 180%"
-          interpolation-decay="200"
+          interpolation-decay={String(config.interpolationDecay)}
+          scale={`${config.initialScale} ${config.initialScale} ${config.initialScale}` as any}
           style={{
             width: "100%",
             height: "100%",
