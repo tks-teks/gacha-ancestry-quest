@@ -388,7 +388,7 @@ export const Object3DViewer = ({
           min-camera-orbit="auto auto 60%"
           max-camera-orbit="auto auto 180%"
           interpolation-decay={String(config.interpolationDecay)}
-          scale={`${config.initialScale} ${config.initialScale} ${config.initialScale}` as any}
+          {...({ scale: `${config.initialScale} ${config.initialScale} ${config.initialScale}` } as any)}
           style={{
             width: "100%",
             height: "100%",
