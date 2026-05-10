@@ -101,7 +101,7 @@ export const Object3DViewer = ({
 
   useEffect(() => {
     const el = viewerRef.current as any;
-    if (!el || !modelUrl) return;
+    if (!el || !effectiveModelUrl) return;
 
     setIsLoading(true);
     setHasError(false);
