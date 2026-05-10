@@ -174,7 +174,7 @@ export const Object3DViewer = ({
   };
 
   // Fallback if no 3D model is available
-  if (!modelUrl || hasError) {
+  if (!effectiveModelUrl || hasError) {
     return (
       <div className="relative w-full h-72 sm:h-80 md:h-96 bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl flex items-center justify-center">
         <div className="text-center p-4">
