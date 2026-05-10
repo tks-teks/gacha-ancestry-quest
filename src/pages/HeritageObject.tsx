@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Sparkles, Images } from "lucide-react";
+import { ArrowLeft, Sparkles, Images, Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
