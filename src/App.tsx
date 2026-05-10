@@ -14,6 +14,7 @@ const HeritageHouses = lazy(() => import("./pages/HeritageHouses"));
 const BotanicalGarden = lazy(() => import("./pages/BotanicalGarden"));
 const Brochure = lazy(() => import("./pages/Brochure"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Admin3DModels = lazy(() => import("./pages/Admin3DModels"));
 
 const queryClient = new QueryClient();
 
