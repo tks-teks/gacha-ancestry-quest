@@ -155,7 +155,7 @@ export const Object3DViewer = ({
       el.removeEventListener("error", onError);
       el.removeEventListener("progress", onProgress);
     };
-  }, [modelUrl]);
+  }, [effectiveModelUrl]);
 
   // Hide touch hint after first interaction
   useEffect(() => {
