@@ -428,12 +428,12 @@ function ModelEditor({
       exposure: row.exposure,
       xr_environment: row.xr_environment,
       initial_scale: row.initial_scale,
-      annotations: row.annotations,
+      annotations: row.annotations as any,
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase
       .from("heritage_models")
-      .upsert(payload, { onConflict: "object_id" });
+      .upsert(payload as any, { onConflict: "object_id" });
     setSaving(false);
     if (error) {
       toast.error("Erreur: " + error.message);
