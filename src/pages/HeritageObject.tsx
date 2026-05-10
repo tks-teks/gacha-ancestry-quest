@@ -205,6 +205,15 @@ const HeritageObject = () => {
           />
         </div>
       </div>
+
+      {/* Discreet admin FAB - desktop only */}
+      <button
+        onClick={() => navigate(`/admin/modeles-3d?objectId=${object.id}`)}
+        title="Gérer le modèle 3D"
+        className="hidden md:flex fixed bottom-6 left-6 z-50 w-10 h-10 items-center justify-center rounded-full bg-card/70 backdrop-blur border border-primary/30 text-primary hover:bg-card/90 transition-all shadow-lg"
+      >
+        <Box className="w-5 h-5" />
+      </button>
     </Layout>
   );
 };
