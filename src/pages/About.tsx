@@ -113,6 +113,16 @@ const About = () => {
           </CardContent>
         </Card>
       </section>
+
+      {/* Discreet admin link */}
+      <div className="px-4 pb-8 text-center">
+        <a
+          href="/admin/modeles-3d"
+          className="text-xs text-muted-foreground/60 hover:text-muted-foreground underline-offset-4 hover:underline transition"
+        >
+          Administration
+        </a>
+      </div>
     </Layout>
   );
 };

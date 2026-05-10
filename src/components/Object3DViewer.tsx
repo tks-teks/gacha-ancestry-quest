@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, RotateCcw, Maximize2, Minimize2, Info, X, Move3d, Smartphone, Hand, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Annotation3D } from "@/data/annotations3D";
+import { supabase } from "@/integrations/supabase/client";
 import "@google/model-viewer";
 
 interface Object3DViewerProps {
@@ -11,6 +12,21 @@ interface Object3DViewerProps {
   alt: string;
   showARButton?: boolean;
   annotations?: Annotation3D[];
+  objectId?: string;
+}
+
+interface ARConfig {
+  glb?: string;
+  usdz?: string;
+  arPlacement: string;
+  arScale: string;
+  shadowIntensity: number;
+  shadowSoftness: number;
+  interpolationDecay: number;
+  exposure: number;
+  xrEnvironment: boolean;
+  initialScale: number;
+  annotations: Annotation3D[];
 }
 
 export const Object3DViewer = ({
@@ -19,7 +35,8 @@ export const Object3DViewer = ({
   posterUrl,
   alt,
   showARButton = true,
-  annotations = [],
+  annotations: annotationsProp = [],
+  objectId,
 }: Object3DViewerProps) => {
   const viewerRef = useRef<HTMLElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +47,61 @@ export const Object3DViewer = ({
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [showARGuide, setShowARGuide] = useState(false);
   const [showTouchHint, setShowTouchHint] = useState(true);
+  const [config, setConfig] = useState<ARConfig>({
+    glb: modelUrl,
+    usdz: iosModelUrl,
+    arPlacement: "floor",
+    arScale: "fixed",
+    shadowIntensity: 1.5,
+    shadowSoftness: 1,
+    interpolationDecay: 200,
+    exposure: 1.1,
+    xrEnvironment: true,
+    initialScale: 1,
+    annotations: annotationsProp,
+  });
+
+  // Fetch dynamic config from heritage_models if objectId provided
+  useEffect(() => {
+    if (!objectId) {
+      setConfig((c) => ({ ...c, glb: modelUrl, usdz: iosModelUrl, annotations: annotationsProp }));
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("heritage_models")
+        .select("*")
+        .eq("object_id", objectId)
+        .maybeSingle();
+      if (cancelled) return;
+      setConfig({
+        glb: data?.model_glb_url || modelUrl,
+        usdz: data?.model_usdz_url || iosModelUrl,
+        arPlacement: data?.ar_placement || "floor",
+        arScale: data?.ar_scale || "fixed",
+        shadowIntensity: data?.shadow_intensity ?? 1.5,
+        shadowSoftness: data?.shadow_softness ?? 1,
+        interpolationDecay: data?.interpolation_decay ?? 200,
+        exposure: data?.exposure ?? 1.1,
+        xrEnvironment: data?.xr_environment ?? true,
+        initialScale: data?.initial_scale ?? 1,
+        annotations:
+          (data?.annotations as unknown as Annotation3D[]) || annotationsProp,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [objectId, modelUrl, iosModelUrl, annotationsProp]);
+
+  const annotations = config.annotations;
+  const effectiveModelUrl = config.glb;
+
 
   useEffect(() => {
     const el = viewerRef.current as any;
-    if (!el || !modelUrl) return;
+    if (!el || !effectiveModelUrl) return;
 
     setIsLoading(true);
     setHasError(false);
@@ -87,7 +155,7 @@ export const Object3DViewer = ({
       el.removeEventListener("error", onError);
       el.removeEventListener("progress", onProgress);
     };
-  }, [modelUrl]);
+  }, [effectiveModelUrl]);
 
   // Hide touch hint after first interaction
   useEffect(() => {
@@ -106,7 +174,7 @@ export const Object3DViewer = ({
   };
 
   // Fallback if no 3D model is available
-  if (!modelUrl || hasError) {
+  if (!effectiveModelUrl || hasError) {
     return (
       <div className="relative w-full h-72 sm:h-80 md:h-96 bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl flex items-center justify-center">
         <div className="text-center p-4">
@@ -297,29 +365,30 @@ export const Object3DViewer = ({
         {/* 3D Model Viewer */}
         <model-viewer
           ref={viewerRef as any}
-          src={modelUrl}
-          ios-src={iosModelUrl}
+          src={effectiveModelUrl}
+          ios-src={config.usdz}
           poster={posterUrl}
           alt={alt}
           ar={showARButton}
           ar-modes="webxr scene-viewer quick-look"
-          ar-scale="fixed"
-          ar-placement="floor"
-          xr-environment
+          ar-scale={config.arScale}
+          ar-placement={config.arPlacement}
+          {...(config.xrEnvironment ? { "xr-environment": "" } : {})}
           camera-controls
           touch-action="pan-y"
           auto-rotate
           rotation-per-second="25deg"
           interaction-prompt="none"
-          shadow-intensity="1.5"
-          shadow-softness="1"
-          exposure="1.1"
+          shadow-intensity={String(config.shadowIntensity)}
+          shadow-softness={String(config.shadowSoftness)}
+          exposure={String(config.exposure)}
           loading="eager"
           reveal="auto"
           camera-orbit="0deg 75deg 105%"
           min-camera-orbit="auto auto 60%"
           max-camera-orbit="auto auto 180%"
-          interpolation-decay="200"
+          interpolation-decay={String(config.interpolationDecay)}
+          {...({ scale: `${config.initialScale} ${config.initialScale} ${config.initialScale}` } as any)}
           style={{
             width: "100%",
             height: "100%",

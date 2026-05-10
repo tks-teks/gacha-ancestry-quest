@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Sparkles, Images } from "lucide-react";
+import { ArrowLeft, Sparkles, Images, Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AncestorChat } from "@/components/AncestorChat";
 import { AudioPlayer } from "@/components/AudioPlayer";
@@ -163,6 +163,7 @@ const HeritageObject = () => {
               alt={object.title}
               showARButton={true}
               annotations={annotations}
+              objectId={object.id}
             />
           )}
           
@@ -204,6 +205,15 @@ const HeritageObject = () => {
           />
         </div>
       </div>
+
+      {/* Discreet admin FAB - desktop only */}
+      <button
+        onClick={() => navigate(`/admin/modeles-3d?objectId=${object.id}`)}
+        title="Gérer le modèle 3D"
+        className="hidden md:flex fixed bottom-6 left-6 z-50 w-10 h-10 items-center justify-center rounded-full bg-card/70 backdrop-blur border border-primary/30 text-primary hover:bg-card/90 transition-all shadow-lg"
+      >
+        <Box className="w-5 h-5" />
+      </button>
     </Layout>
   );
 };

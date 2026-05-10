@@ -14,6 +14,7 @@ const HeritageHouses = lazy(() => import("./pages/HeritageHouses"));
 const BotanicalGarden = lazy(() => import("./pages/BotanicalGarden"));
 const Brochure = lazy(() => import("./pages/Brochure"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Admin3DModels = lazy(() => import("./pages/Admin3DModels"));
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/maisons-patrimoine" element={<HeritageHouses />} />
           <Route path="/jardin-botanique" element={<BotanicalGarden />} />
           <Route path="/brochure" element={<Brochure />} />
+          <Route path="/admin/modeles-3d" element={<Admin3DModels />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
