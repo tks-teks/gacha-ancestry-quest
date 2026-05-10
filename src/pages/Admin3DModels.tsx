@@ -648,24 +648,29 @@ function ModelEditor({
           </div>
           {debouncedUrl ? (
             <div className="h-[260px]">
-              <model-viewer
-                key={debouncedUrl}
-                src={debouncedUrl}
-                ios-src={row.model_usdz_url || undefined}
-                camera-controls
-                auto-rotate
-                shadow-intensity={String(row.shadow_intensity)}
-                shadow-softness={String(row.shadow_softness)}
-                exposure={String(row.exposure)}
-                interpolation-decay={String(row.interpolation_decay)}
-                ar-placement={row.ar_placement}
-                ar-scale={row.ar_scale}
-                {...(row.xr_environment ? { "xr-environment": "" } : {})}
-                scale={`${row.initial_scale} ${row.initial_scale} ${row.initial_scale}`}
-                style={{ width: "100%", height: "100%" }}
-                onLoad={() => setPreviewStatus("ok")}
-                onError={() => setPreviewStatus("error")}
-              />
+              {(() => {
+                const MV: any = "model-viewer";
+                return (
+                  <MV
+                    key={debouncedUrl}
+                    src={debouncedUrl}
+                    ios-src={row.model_usdz_url || undefined}
+                    camera-controls
+                    auto-rotate
+                    shadow-intensity={String(row.shadow_intensity)}
+                    shadow-softness={String(row.shadow_softness)}
+                    exposure={String(row.exposure)}
+                    interpolation-decay={String(row.interpolation_decay)}
+                    ar-placement={row.ar_placement}
+                    ar-scale={row.ar_scale}
+                    {...(row.xr_environment ? { "xr-environment": "" } : {})}
+                    scale={`${row.initial_scale} ${row.initial_scale} ${row.initial_scale}`}
+                    style={{ width: "100%", height: "100%" }}
+                    onLoad={() => setPreviewStatus("ok")}
+                    onError={() => setPreviewStatus("error")}
+                  />
+                );
+              })()}
             </div>
           ) : (
             <p className="text-xs text-muted-foreground py-8 text-center">
