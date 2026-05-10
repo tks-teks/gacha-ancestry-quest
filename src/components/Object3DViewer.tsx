@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, RotateCcw, Maximize2, Minimize2, Info, X, Move3d, Smartphone, Hand, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Annotation3D } from "@/data/annotations3D";
+import { supabase } from "@/integrations/supabase/client";
 import "@google/model-viewer";
 
 interface Object3DViewerProps {
@@ -11,6 +12,21 @@ interface Object3DViewerProps {
   alt: string;
   showARButton?: boolean;
   annotations?: Annotation3D[];
+  objectId?: string;
+}
+
+interface ARConfig {
+  glb?: string;
+  usdz?: string;
+  arPlacement: string;
+  arScale: string;
+  shadowIntensity: number;
+  shadowSoftness: number;
+  interpolationDecay: number;
+  exposure: number;
+  xrEnvironment: boolean;
+  initialScale: number;
+  annotations: Annotation3D[];
 }
 
 export const Object3DViewer = ({
@@ -19,7 +35,8 @@ export const Object3DViewer = ({
   posterUrl,
   alt,
   showARButton = true,
-  annotations = [],
+  annotations: annotationsProp = [],
+  objectId,
 }: Object3DViewerProps) => {
   const viewerRef = useRef<HTMLElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
