@@ -41,6 +41,60 @@ export type Database = {
         }
         Relationships: []
       }
+      heritage_models: {
+        Row: {
+          annotations: Json | null
+          ar_placement: string | null
+          ar_scale: string | null
+          exposure: number | null
+          id: string
+          initial_scale: number | null
+          interpolation_decay: number | null
+          model_glb_url: string | null
+          model_usdz_url: string | null
+          object_id: string
+          shadow_intensity: number | null
+          shadow_softness: number | null
+          source_type: string | null
+          updated_at: string | null
+          xr_environment: boolean | null
+        }
+        Insert: {
+          annotations?: Json | null
+          ar_placement?: string | null
+          ar_scale?: string | null
+          exposure?: number | null
+          id?: string
+          initial_scale?: number | null
+          interpolation_decay?: number | null
+          model_glb_url?: string | null
+          model_usdz_url?: string | null
+          object_id: string
+          shadow_intensity?: number | null
+          shadow_softness?: number | null
+          source_type?: string | null
+          updated_at?: string | null
+          xr_environment?: boolean | null
+        }
+        Update: {
+          annotations?: Json | null
+          ar_placement?: string | null
+          ar_scale?: string | null
+          exposure?: number | null
+          id?: string
+          initial_scale?: number | null
+          interpolation_decay?: number | null
+          model_glb_url?: string | null
+          model_usdz_url?: string | null
+          object_id?: string
+          shadow_intensity?: number | null
+          shadow_softness?: number | null
+          source_type?: string | null
+          updated_at?: string | null
+          xr_environment?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
