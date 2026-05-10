@@ -47,6 +47,57 @@ export const Object3DViewer = ({
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [showARGuide, setShowARGuide] = useState(false);
   const [showTouchHint, setShowTouchHint] = useState(true);
+  const [config, setConfig] = useState<ARConfig>({
+    glb: modelUrl,
+    usdz: iosModelUrl,
+    arPlacement: "floor",
+    arScale: "fixed",
+    shadowIntensity: 1.5,
+    shadowSoftness: 1,
+    interpolationDecay: 200,
+    exposure: 1.1,
+    xrEnvironment: true,
+    initialScale: 1,
+    annotations: annotationsProp,
+  });
+
+  // Fetch dynamic config from heritage_models if objectId provided
+  useEffect(() => {
+    if (!objectId) {
+      setConfig((c) => ({ ...c, glb: modelUrl, usdz: iosModelUrl, annotations: annotationsProp }));
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("heritage_models")
+        .select("*")
+        .eq("object_id", objectId)
+        .maybeSingle();
+      if (cancelled) return;
+      setConfig({
+        glb: data?.model_glb_url || modelUrl,
+        usdz: data?.model_usdz_url || iosModelUrl,
+        arPlacement: data?.ar_placement || "floor",
+        arScale: data?.ar_scale || "fixed",
+        shadowIntensity: data?.shadow_intensity ?? 1.5,
+        shadowSoftness: data?.shadow_softness ?? 1,
+        interpolationDecay: data?.interpolation_decay ?? 200,
+        exposure: data?.exposure ?? 1.1,
+        xrEnvironment: data?.xr_environment ?? true,
+        initialScale: data?.initial_scale ?? 1,
+        annotations:
+          (data?.annotations as unknown as Annotation3D[]) || annotationsProp,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [objectId, modelUrl, iosModelUrl, annotationsProp]);
+
+  const annotations = config.annotations;
+  const effectiveModelUrl = config.glb;
+
 
   useEffect(() => {
     const el = viewerRef.current as any;
