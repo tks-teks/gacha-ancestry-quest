@@ -163,6 +163,7 @@ const HeritageObject = () => {
               alt={object.title}
               showARButton={true}
               annotations={annotations}
+              objectId={object.id}
             />
           )}
           
