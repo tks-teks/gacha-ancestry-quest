@@ -528,25 +528,30 @@ function ModelEditor({
     }
   };
 
+  const targetObj = heritageObjects.find((o) => o.id === row.object_id);
+  const isNew = !row.object_id;
+
   return (
     <>
       <SheetHeader>
-        <SheetTitle>Modèle pour : {row.object_id}</SheetTitle>
+        <SheetTitle className="font-serif">
+          {isNew ? "Ajouter un modèle 3D" : `Modifier — ${targetObj?.title || row.object_id}`}
+        </SheetTitle>
         <SheetDescription>
-          Configurez le modèle 3D et les paramètres AR
+          Configurez le modèle GLB/USDZ et les paramètres AR
         </SheetDescription>
       </SheetHeader>
 
       <div className="space-y-6 py-4">
         {/* Target object */}
         <div>
-          <Label>Objet cible</Label>
+          <Label>Objet patrimoine cible</Label>
           <Select
             value={row.object_id}
             onValueChange={(v) => update({ object_id: v })}
           >
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue placeholder="Sélectionnez un objet..." />
             </SelectTrigger>
             <SelectContent>
               {heritageObjects.map((o) => (
