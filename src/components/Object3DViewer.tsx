@@ -3,6 +3,7 @@ import { Loader2, RotateCcw, Maximize2, Minimize2, Info, X, Move3d, Smartphone, 
 import { Button } from "@/components/ui/button";
 import { Annotation3D } from "@/data/annotations3D";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 import "@google/model-viewer";
 
 interface Object3DViewerProps {
@@ -165,9 +166,23 @@ export const Object3DViewer = ({
     }
   }, [isLoading, showTouchHint]);
 
+  const isMobile = useIsMobile();
+
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
+    setIsFullscreen((v) => !v);
   };
+
+  // Lock body scroll & hide bottom nav while fullscreen
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("viewer-fullscreen");
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.classList.remove("viewer-fullscreen");
+    };
+  }, [isFullscreen]);
 
   const handleARClick = () => {
     setShowARGuide(true);
@@ -264,9 +279,10 @@ export const Object3DViewer = ({
       <div
         className={`relative rounded-xl overflow-hidden transition-all duration-500 touch-manipulation ${
           isFullscreen
-            ? "fixed inset-0 z-50 bg-background rounded-none"
+            ? "fixed inset-0 z-50 bg-black rounded-none animate-scale-in"
             : "w-full h-72 sm:h-80 md:h-96"
         }`}
+        style={isFullscreen ? { transformOrigin: "center" } : undefined}
       >
         {/* Loading overlay */}
         {isLoading && (
@@ -334,10 +350,13 @@ export const Object3DViewer = ({
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
-            className="w-10 h-10 bg-card/90 backdrop-blur-sm shadow-md border border-border/50"
+            aria-label={isFullscreen ? "Fermer le plein écran" : "Agrandir"}
+            className={`bg-card/90 backdrop-blur-sm shadow-md border border-border/50 ${
+              isFullscreen && isMobile ? "w-11 h-11" : "w-10 h-10"
+            }`}
           >
             {isFullscreen ? (
-              <Minimize2 className="w-5 h-5" />
+              isMobile ? <X className="w-5 h-5" /> : <Minimize2 className="w-5 h-5" />
             ) : (
               <Maximize2 className="w-5 h-5" />
             )}

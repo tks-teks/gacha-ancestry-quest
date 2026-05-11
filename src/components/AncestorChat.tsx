@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Message {
   role: "user" | "assistant";
@@ -159,6 +162,136 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
     }
   };
 
+  const isMobile = useIsMobile();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const lastSeenLengthRef = useRef(displayMessages.length);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    if (sheetOpen) {
+      lastSeenLengthRef.current = displayMessages.length;
+      setUnreadCount(0);
+      return;
+    }
+    const newAncestorMsgs = displayMessages
+      .slice(lastSeenLengthRef.current)
+      .filter((m) => m.role === "ancestor" && m.content.trim().length > 0).length;
+    if (newAncestorMsgs > 0) setUnreadCount((c) => c + newAncestorMsgs);
+    lastSeenLengthRef.current = displayMessages.length;
+  }, [displayMessages, sheetOpen, isMobile]);
+
+  const initials = ancestorName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+  const messagesList = (
+    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {displayMessages.map((message, index) => (
+        <div
+          key={index}
+          className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+        >
+          <div
+            className={`max-w-[80%] rounded-lg px-4 py-2 ${
+              message.role === "user"
+                ? "bg-primary text-primary-foreground"
+                : "bg-accent text-accent-foreground border border-primary/20"
+            }`}
+          >
+            <p className="text-sm">{message.content}</p>
+          </div>
+        </div>
+      ))}
+      {isLoading && displayMessages[displayMessages.length - 1]?.content === "" && (
+        <div className="flex justify-start">
+          <div className="bg-accent text-accent-foreground border border-primary/20 rounded-lg px-4 py-3">
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+              <span className="text-xs text-muted-foreground ml-1">L'ancêtre médite...</span>
+            </div>
+          </div>
+        </div>
+      )}
+      <div ref={messagesEndRef} />
+    </div>
+  );
+
+  const inputForm = (
+    <form onSubmit={handleSubmit} className="p-4 border-t border-border bg-background">
+      <div className="flex gap-2">
+        <Input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Posez votre question..."
+          className="flex-1"
+          disabled={isLoading}
+        />
+        <Button type="submit" variant="ancestor" size="icon" disabled={isLoading} aria-label="Envoyer">
+          <Send className="w-4 h-4" />
+        </Button>
+      </div>
+    </form>
+  );
+
+  if (isMobile) {
+    return (
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Parler à l'ancêtre"
+                  className="fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+                >
+                  <MessageCircle className="w-6 h-6" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-destructive text-destructive-foreground text-[11px] font-bold flex items-center justify-center border-2 border-background">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </button>
+              </SheetTrigger>
+            </TooltipTrigger>
+            <TooltipContent side="left">Parler à l'ancêtre</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <SheetContent
+          side="bottom"
+          className="h-[85vh] p-0 flex flex-col rounded-t-2xl border-t border-border"
+        >
+          <div className="pt-2 pb-1 flex justify-center">
+            <div className="w-12 h-1.5 rounded-full bg-muted-foreground/40" />
+          </div>
+          <SheetHeader className="px-4 pb-3 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-serif font-bold">
+                {initials}
+              </div>
+              <div className="text-left">
+                <SheetTitle className="font-serif text-base" style={{ fontFamily: "Cinzel, serif" }}>
+                  {ancestorName}
+                </SheetTitle>
+                <p className="text-xs text-muted-foreground">L'ancêtre vous écoute</p>
+              </div>
+            </div>
+          </SheetHeader>
+          {messagesList}
+          {inputForm}
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
   return (
     <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
       <div className="bg-primary/10 px-4 py-3 border-b border-border">
@@ -171,54 +304,9 @@ export const AncestorChat = ({ ancestorName, greeting, objectContext }: Ancestor
         <p className="text-sm text-muted-foreground mt-1">{ancestorName}</p>
       </div>
 
-      <div className="h-64 overflow-y-auto p-4 space-y-4">
-        {displayMessages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                message.role === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-accent text-accent-foreground border border-primary/20"
-              }`}
-            >
-              <p className="text-sm">{message.content}</p>
-            </div>
-          </div>
-        ))}
-        {isLoading && displayMessages[displayMessages.length - 1]?.content === "" && (
-          <div className="flex justify-start">
-            <div className="bg-accent text-accent-foreground border border-primary/20 rounded-lg px-4 py-3">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                </div>
-                <span className="text-xs text-muted-foreground ml-1">L'ancêtre médite...</span>
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
+      <div className="h-64 flex flex-col">{messagesList}</div>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-border">
-        <div className="flex gap-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Posez votre question..."
-            className="flex-1"
-            disabled={isLoading}
-          />
-          <Button type="submit" variant="ancestor" size="icon" disabled={isLoading}>
-            <Send className="w-4 h-4" />
-          </Button>
-        </div>
-      </form>
+      {inputForm}
     </div>
   );
 };
