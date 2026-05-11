@@ -201,13 +201,21 @@ export default function Admin3DModels() {
           <ArrowLeft className="w-4 h-4 mr-2" /> Retour
         </Button>
 
-        <header className="mb-8">
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
-            Gestion des Modèles 3D
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Ajoutez et associez des modèles GLB/USDZ aux objets patrimoine
-          </p>
+        <header className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+              Gestion des Modèles 3D
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Ajoutez et associez des modèles GLB/USDZ aux objets patrimoine
+            </p>
+          </div>
+          <Button
+            onClick={openNew}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-6 py-3 font-serif shadow-lg hover:shadow-primary/40 transition-all hover:scale-[1.02]"
+          >
+            <Plus className="w-4 h-4 mr-2" /> Ajouter un modèle 3D
+          </Button>
         </header>
 
         {loading ? (
@@ -215,10 +223,32 @@ export default function Admin3DModels() {
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <>
+            {!hasAnyModel && (
+              <Card className="bg-card/40 border-dashed border-primary/30 mb-6">
+                <CardContent className="p-8 text-center space-y-3">
+                  <Box className="w-20 h-20 mx-auto text-primary/40" />
+                  <h3 className="font-serif text-xl text-foreground">
+                    Aucun modèle 3D configuré
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Commencez par assigner un modèle GLB à un objet patrimoine
+                    pour activer la réalité augmentée.
+                  </p>
+                  <Button
+                    onClick={openNew}
+                    className="bg-primary text-primary-foreground rounded-xl"
+                  >
+                    <Plus className="w-4 h-4 mr-2" /> Ajouter le premier modèle
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            <div className="grid gap-4 md:grid-cols-2">
             {heritageObjects.map((obj) => {
               const row = rows[obj.id];
               const glb = row?.model_glb_url || obj.model3dUrl;
+              const hasModel = !!glb;
               return (
                 <Card
                   key={obj.id}
@@ -240,13 +270,24 @@ export default function Admin3DModels() {
                       {truncate(glb || "Aucune URL", 60)}
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => openEdit(obj.id)}
-                      >
-                        <Settings2 className="w-4 h-4 mr-1" /> Modifier
-                      </Button>
+                      {hasModel ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openEdit(obj.id)}
+                        >
+                          <Settings2 className="w-4 h-4 mr-1" /> Modifier
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openEdit(obj.id)}
+                          className="border-primary/50 text-primary hover:bg-primary/10"
+                        >
+                          <Box className="w-4 h-4 mr-1" /> Assigner un modèle
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="ghost"
@@ -260,7 +301,8 @@ export default function Admin3DModels() {
                 </Card>
               );
             })}
-          </div>
+            </div>
+          </>
         )}
       </div>
 
