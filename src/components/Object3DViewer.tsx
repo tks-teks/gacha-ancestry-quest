@@ -279,9 +279,10 @@ export const Object3DViewer = ({
       <div
         className={`relative rounded-xl overflow-hidden transition-all duration-500 touch-manipulation ${
           isFullscreen
-            ? "fixed inset-0 z-50 bg-background rounded-none"
+            ? "fixed inset-0 z-50 bg-black rounded-none animate-scale-in"
             : "w-full h-72 sm:h-80 md:h-96"
         }`}
+        style={isFullscreen ? { transformOrigin: "center" } : undefined}
       >
         {/* Loading overlay */}
         {isLoading && (
