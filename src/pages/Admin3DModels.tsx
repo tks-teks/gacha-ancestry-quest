@@ -51,6 +51,7 @@ import {
   XCircle,
   Loader2,
   Maximize2,
+  Box,
 } from "lucide-react";
 import { toast } from "sonner";
 import { heritageObjects } from "@/data/heritageObjects";
@@ -149,6 +150,15 @@ export default function Admin3DModels() {
     }
   };
 
+  const openNew = () => {
+    // Empty mode: no object preselected, defaults
+    setEditing(DEFAULT_ROW(""));
+  };
+
+  const hasAnyModel = Object.values(rows).some(
+    (r) => r.model_glb_url || r.model_usdz_url,
+  );
+
   const statusBadge = (objectId: string) => {
     const row = rows[objectId];
     const obj = heritageObjects.find((o) => o.id === objectId);
@@ -191,13 +201,21 @@ export default function Admin3DModels() {
           <ArrowLeft className="w-4 h-4 mr-2" /> Retour
         </Button>
 
-        <header className="mb-8">
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
-            Gestion des Modèles 3D
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Ajoutez et associez des modèles GLB/USDZ aux objets patrimoine
-          </p>
+        <header className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+              Gestion des Modèles 3D
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Ajoutez et associez des modèles GLB/USDZ aux objets patrimoine
+            </p>
+          </div>
+          <Button
+            onClick={openNew}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-6 py-3 font-serif shadow-lg hover:shadow-primary/40 transition-all hover:scale-[1.02]"
+          >
+            <Plus className="w-4 h-4 mr-2" /> Ajouter un modèle 3D
+          </Button>
         </header>
 
         {loading ? (
@@ -205,10 +223,32 @@ export default function Admin3DModels() {
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <>
+            {!hasAnyModel && (
+              <Card className="bg-card/40 border-dashed border-primary/30 mb-6">
+                <CardContent className="p-8 text-center space-y-3">
+                  <Box className="w-20 h-20 mx-auto text-primary/40" />
+                  <h3 className="font-serif text-xl text-foreground">
+                    Aucun modèle 3D configuré
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Commencez par assigner un modèle GLB à un objet patrimoine
+                    pour activer la réalité augmentée.
+                  </p>
+                  <Button
+                    onClick={openNew}
+                    className="bg-primary text-primary-foreground rounded-xl"
+                  >
+                    <Plus className="w-4 h-4 mr-2" /> Ajouter le premier modèle
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            <div className="grid gap-4 md:grid-cols-2">
             {heritageObjects.map((obj) => {
               const row = rows[obj.id];
               const glb = row?.model_glb_url || obj.model3dUrl;
+              const hasModel = !!glb;
               return (
                 <Card
                   key={obj.id}
@@ -230,13 +270,24 @@ export default function Admin3DModels() {
                       {truncate(glb || "Aucune URL", 60)}
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => openEdit(obj.id)}
-                      >
-                        <Settings2 className="w-4 h-4 mr-1" /> Modifier
-                      </Button>
+                      {hasModel ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openEdit(obj.id)}
+                        >
+                          <Settings2 className="w-4 h-4 mr-1" /> Modifier
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openEdit(obj.id)}
+                          className="border-primary/50 text-primary hover:bg-primary/10"
+                        >
+                          <Box className="w-4 h-4 mr-1" /> Assigner un modèle
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="ghost"
@@ -250,7 +301,8 @@ export default function Admin3DModels() {
                 </Card>
               );
             })}
-          </div>
+            </div>
+          </>
         )}
       </div>
 
@@ -476,25 +528,30 @@ function ModelEditor({
     }
   };
 
+  const targetObj = heritageObjects.find((o) => o.id === row.object_id);
+  const isNew = !row.object_id;
+
   return (
     <>
       <SheetHeader>
-        <SheetTitle>Modèle pour : {row.object_id}</SheetTitle>
+        <SheetTitle className="font-serif">
+          {isNew ? "Ajouter un modèle 3D" : `Modifier — ${targetObj?.title || row.object_id}`}
+        </SheetTitle>
         <SheetDescription>
-          Configurez le modèle 3D et les paramètres AR
+          Configurez le modèle GLB/USDZ et les paramètres AR
         </SheetDescription>
       </SheetHeader>
 
       <div className="space-y-6 py-4">
         {/* Target object */}
         <div>
-          <Label>Objet cible</Label>
+          <Label>Objet patrimoine cible</Label>
           <Select
             value={row.object_id}
             onValueChange={(v) => update({ object_id: v })}
           >
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue placeholder="Sélectionnez un objet..." />
             </SelectTrigger>
             <SelectContent>
               {heritageObjects.map((o) => (
@@ -504,6 +561,22 @@ function ModelEditor({
               ))}
             </SelectContent>
           </Select>
+          {targetObj && (
+            <div className="mt-3 flex items-center gap-3 p-2 rounded-lg bg-muted/30 border border-border">
+              <div className="w-10 h-10 rounded bg-primary/20 flex items-center justify-center">
+                <Box className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{targetObj.title}</p>
+                <p className="text-xs text-muted-foreground truncate font-mono">{targetObj.id}</p>
+              </div>
+              {row.model_glb_url ? (
+                <Badge className="bg-green-500/20 text-green-300 border-green-500/40">✅ Actif</Badge>
+              ) : (
+                <Badge className="bg-red-500/20 text-red-300 border-red-500/40">❌ Aucun</Badge>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Type */}
@@ -840,7 +913,7 @@ function ModelEditor({
 
         {/* Actions */}
         <div className="flex flex-col gap-2 pt-4 border-t border-border">
-          <Button onClick={save} disabled={saving}>
+          <Button onClick={save} disabled={saving || !row.object_id}>
             {saving ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -848,17 +921,24 @@ function ModelEditor({
             )}
             Sauvegarder
           </Button>
+          {!row.object_id && (
+            <p className="text-xs text-muted-foreground text-center">
+              Sélectionnez un objet patrimoine cible pour activer la sauvegarde
+            </p>
+          )}
           <div className="flex gap-2">
             <Button variant="ghost" onClick={onClose} className="flex-1">
               Annuler
             </Button>
-            <Button
-              variant="destructive"
-              onClick={removeModel}
-              className="flex-1"
-            >
-              <Trash2 className="w-4 h-4 mr-2" /> Supprimer
-            </Button>
+            {!isNew && (
+              <Button
+                variant="destructive"
+                onClick={removeModel}
+                className="flex-1"
+              >
+                <Trash2 className="w-4 h-4 mr-2" /> Supprimer
+              </Button>
+            )}
           </div>
         </div>
       </div>
