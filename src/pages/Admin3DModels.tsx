@@ -561,6 +561,20 @@ function ModelEditor({
               ))}
             </SelectContent>
           </Select>
+          {targetObj && (
+            <div className="mt-3 flex items-center gap-3 p-2 rounded-lg bg-muted/30 border border-border">
+              <img
+                src={targetObj.coverImage || targetObj.image}
+                alt={targetObj.title}
+                className="w-10 h-10 rounded object-cover"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{targetObj.title}</p>
+                <p className="text-xs text-muted-foreground truncate">{targetObj.id}</p>
+              </div>
+              {statusBadgeFor(row)}
+            </div>
+          )}
         </div>
 
         {/* Type */}
