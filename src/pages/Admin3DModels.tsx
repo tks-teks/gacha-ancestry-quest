@@ -51,6 +51,7 @@ import {
   XCircle,
   Loader2,
   Maximize2,
+  Box,
 } from "lucide-react";
 import { toast } from "sonner";
 import { heritageObjects } from "@/data/heritageObjects";
