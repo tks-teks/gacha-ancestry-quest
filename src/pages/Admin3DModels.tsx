@@ -563,16 +563,18 @@ function ModelEditor({
           </Select>
           {targetObj && (
             <div className="mt-3 flex items-center gap-3 p-2 rounded-lg bg-muted/30 border border-border">
-              <img
-                src={targetObj.coverImage || targetObj.image}
-                alt={targetObj.title}
-                className="w-10 h-10 rounded object-cover"
-              />
+              <div className="w-10 h-10 rounded bg-primary/20 flex items-center justify-center">
+                <Box className="w-5 h-5 text-primary" />
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{targetObj.title}</p>
-                <p className="text-xs text-muted-foreground truncate">{targetObj.id}</p>
+                <p className="text-xs text-muted-foreground truncate font-mono">{targetObj.id}</p>
               </div>
-              {statusBadgeFor(row)}
+              {row.model_glb_url ? (
+                <Badge className="bg-green-500/20 text-green-300 border-green-500/40">✅ Actif</Badge>
+              ) : (
+                <Badge className="bg-red-500/20 text-red-300 border-red-500/40">❌ Aucun</Badge>
+              )}
             </div>
           )}
         </div>
