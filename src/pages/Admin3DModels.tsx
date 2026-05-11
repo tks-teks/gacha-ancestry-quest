@@ -913,7 +913,7 @@ function ModelEditor({
 
         {/* Actions */}
         <div className="flex flex-col gap-2 pt-4 border-t border-border">
-          <Button onClick={save} disabled={saving}>
+          <Button onClick={save} disabled={saving || !row.object_id}>
             {saving ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -921,17 +921,24 @@ function ModelEditor({
             )}
             Sauvegarder
           </Button>
+          {!row.object_id && (
+            <p className="text-xs text-muted-foreground text-center">
+              Sélectionnez un objet patrimoine cible pour activer la sauvegarde
+            </p>
+          )}
           <div className="flex gap-2">
             <Button variant="ghost" onClick={onClose} className="flex-1">
               Annuler
             </Button>
-            <Button
-              variant="destructive"
-              onClick={removeModel}
-              className="flex-1"
-            >
-              <Trash2 className="w-4 h-4 mr-2" /> Supprimer
-            </Button>
+            {!isNew && (
+              <Button
+                variant="destructive"
+                onClick={removeModel}
+                className="flex-1"
+              >
+                <Trash2 className="w-4 h-4 mr-2" /> Supprimer
+              </Button>
+            )}
           </div>
         </div>
       </div>
