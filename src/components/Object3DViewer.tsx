@@ -166,9 +166,23 @@ export const Object3DViewer = ({
     }
   }, [isLoading, showTouchHint]);
 
+  const isMobile = useIsMobile();
+
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
+    setIsFullscreen((v) => !v);
   };
+
+  // Lock body scroll & hide bottom nav while fullscreen
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("viewer-fullscreen");
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.classList.remove("viewer-fullscreen");
+    };
+  }, [isFullscreen]);
 
   const handleARClick = () => {
     setShowARGuide(true);
