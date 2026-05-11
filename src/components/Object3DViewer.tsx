@@ -3,6 +3,7 @@ import { Loader2, RotateCcw, Maximize2, Minimize2, Info, X, Move3d, Smartphone, 
 import { Button } from "@/components/ui/button";
 import { Annotation3D } from "@/data/annotations3D";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 import "@google/model-viewer";
 
 interface Object3DViewerProps {
