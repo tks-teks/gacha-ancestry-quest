@@ -149,6 +149,15 @@ export default function Admin3DModels() {
     }
   };
 
+  const openNew = () => {
+    // Empty mode: no object preselected, defaults
+    setEditing(DEFAULT_ROW(""));
+  };
+
+  const hasAnyModel = Object.values(rows).some(
+    (r) => r.model_glb_url || r.model_usdz_url,
+  );
+
   const statusBadge = (objectId: string) => {
     const row = rows[objectId];
     const obj = heritageObjects.find((o) => o.id === objectId);
