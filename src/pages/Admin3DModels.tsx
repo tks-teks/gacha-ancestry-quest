@@ -531,6 +531,28 @@ function ModelEditor({
   const targetObj = heritageObjects.find((o) => o.id === row.object_id);
   const isNew = !row.object_id;
 
+  const [customName, setCustomName] = useState("");
+  const [customId, setCustomId] = useState("");
+  const slugify = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const onCustomNameChange = (v: string) => {
+    setCustomName(v);
+    const slug = slugify(v);
+    setCustomId(slug);
+    if (v.trim()) update({ object_id: slug });
+  };
+  const onCustomIdChange = (v: string) => {
+    const slug = slugify(v);
+    setCustomId(slug);
+    if (customName.trim()) update({ object_id: slug });
+  };
+
   return (
     <>
       <SheetHeader>
@@ -577,6 +599,35 @@ function ModelEditor({
               )}
             </div>
           )}
+
+          <div className="flex items-center gap-2 my-3">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground">OU</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <Label>Nouvel objet (saisie libre)</Label>
+              <Input
+                value={customName}
+                onChange={(e) => onCustomNameChange(e.target.value)}
+                placeholder="Tapez le nom de votre objet..."
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Si vous saisissez ici, le champ ci-dessus est ignoré
+              </p>
+            </div>
+            <div>
+              <Label>ID unique</Label>
+              <Input
+                value={customId}
+                onChange={(e) => onCustomIdChange(e.target.value)}
+                placeholder="ex: masque-cuivre-bamileke"
+                className="font-mono"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Type */}
