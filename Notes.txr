@@ -1,0 +1,4 @@
+Notes importantes
+Le backend (Supabase / Lovable Cloud) reste hébergé chez Lovable — Docker ne sert que le frontend statique. Les edge functions (ancestor-chat) et la base de données continuent de tourner sur l'infra Lovable Cloud.
+Les variables VITE_* sont injectées au build, pas au runtime (Vite les inline dans le bundle).
+Pour servir derrière un reverse proxy existant (Traefik, Nginx host), retirez le mapping 8080:80 et utilisez le réseau Docker.
