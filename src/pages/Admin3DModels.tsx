@@ -599,6 +599,35 @@ function ModelEditor({
               )}
             </div>
           )}
+
+          <div className="flex items-center gap-2 my-3">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground">OU</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <Label>Nouvel objet (saisie libre)</Label>
+              <Input
+                value={customName}
+                onChange={(e) => onCustomNameChange(e.target.value)}
+                placeholder="Tapez le nom de votre objet..."
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Si vous saisissez ici, le champ ci-dessus est ignoré
+              </p>
+            </div>
+            <div>
+              <Label>ID unique</Label>
+              <Input
+                value={customId}
+                onChange={(e) => onCustomIdChange(e.target.value)}
+                placeholder="ex: masque-cuivre-bamileke"
+                className="font-mono"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Type */}
