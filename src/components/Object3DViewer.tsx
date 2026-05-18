@@ -229,6 +229,28 @@ export const Object3DViewer = ({
               </p>
             </div>
 
+            {(() => {
+              const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+              const isIOS = /iPad|iPhone|iPod/.test(ua);
+              const isAndroid = /Android/.test(ua);
+              const isMobileUA = isIOS || isAndroid;
+              if (!isMobileUA) {
+                return (
+                  <div className="mb-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200">
+                    ⚠️ La caméra AR ne fonctionne que sur smartphone (Android avec ARCore ou iPhone). Ouvre cette page sur ton mobile.
+                  </div>
+                );
+              }
+              if (isIOS && !config.usdz) {
+                return (
+                  <div className="mb-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200">
+                    ⚠️ Sur iPhone, l'AR nécessite un fichier USDZ qui n'est pas encore fourni pour cet objet. Essaie depuis un Android, ou ajoute un USDZ dans l'admin.
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
             <div className="space-y-4 mb-6">
               <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
@@ -404,11 +426,11 @@ export const Object3DViewer = ({
         <model-viewer
           ref={viewerRef as any}
           src={effectiveModelUrl}
-          ios-src={config.usdz}
+          {...(config.usdz ? { "ios-src": config.usdz } : {})}
           poster={posterUrl}
           alt={alt}
-          ar={showARButton}
-          ar-modes="webxr scene-viewer quick-look"
+          {...(showARButton ? { ar: "" } : {})}
+          ar-modes="scene-viewer webxr quick-look"
           ar-scale={config.arScale}
           ar-placement={config.arPlacement}
           {...(config.xrEnvironment ? { "xr-environment": "" } : {})}
