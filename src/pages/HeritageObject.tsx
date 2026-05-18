@@ -116,7 +116,7 @@ const HeritageObject = () => {
           </div>
           
           <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <AudioPlayer text={object.audioText} />
+            <AudioPlayer text={object.audioText} autoPlay />
           </div>
         </div>
 
