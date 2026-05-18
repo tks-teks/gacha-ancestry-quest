@@ -404,11 +404,11 @@ export const Object3DViewer = ({
         <model-viewer
           ref={viewerRef as any}
           src={effectiveModelUrl}
-          ios-src={config.usdz}
+          {...(config.usdz ? { "ios-src": config.usdz } : {})}
           poster={posterUrl}
           alt={alt}
-          ar={showARButton}
-          ar-modes="webxr scene-viewer quick-look"
+          {...(showARButton ? { ar: "" } : {})}
+          ar-modes="scene-viewer webxr quick-look"
           ar-scale={config.arScale}
           ar-placement={config.arPlacement}
           {...(config.xrEnvironment ? { "xr-environment": "" } : {})}
