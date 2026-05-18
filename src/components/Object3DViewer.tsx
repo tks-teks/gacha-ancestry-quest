@@ -260,11 +260,30 @@ export const Object3DViewer = ({
             </div>
 
             <Button
-              onClick={() => {
+              onClick={async () => {
                 setShowARGuide(false);
-                // Trigger the AR button in model-viewer
-                const arButton = viewerRef.current?.shadowRoot?.querySelector('[slot="ar-button"]') as HTMLElement;
-                if (arButton) arButton.click();
+                const el = viewerRef.current as any;
+                if (!el) return;
+                try {
+                  // Wait a tick to let modal close (user gesture still valid)
+                  if (typeof el.activateAR === "function") {
+                    await el.activateAR();
+                  } else {
+                    const arBtn = el.shadowRoot?.querySelector('[slot="ar-button"], button[part="default-ar-button"]') as HTMLElement | null;
+                    arBtn?.click();
+                  }
+                } catch (err) {
+                  console.error("AR activation failed", err);
+                  // Fallback: open Scene Viewer / Quick Look directly via intent URL
+                  const ua = navigator.userAgent;
+                  const isIOS = /iPad|iPhone|iPod/.test(ua);
+                  if (isIOS && config.usdz) {
+                    window.location.href = config.usdz;
+                  } else if (/Android/.test(ua) && config.glb) {
+                    const intent = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(config.glb)}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent(window.location.href)};end;`;
+                    window.location.href = intent;
+                  }
+                }
               }}
               className="w-full py-4 text-base font-semibold"
               size="lg"
