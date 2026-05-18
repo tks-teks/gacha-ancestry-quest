@@ -5,15 +5,17 @@ import { cn } from "@/lib/utils";
 
 interface AudioPlayerProps {
   text: string;
+  autoPlay?: boolean;
 }
 
 const SPEEDS = [0.75, 1, 1.25] as const;
 
-export const AudioPlayer = ({ text }: AudioPlayerProps) => {
+export const AudioPlayer = ({ text, autoPlay = false }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [rate, setRate] = useState<number>(1);
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const startedRef = useRef(false);
 
   // Estimated duration (~150 words/min)
   const wordCount = text.trim().split(/\s+/).length;
@@ -23,13 +25,9 @@ export const AudioPlayer = ({ text }: AudioPlayerProps) => {
 
   useEffect(() => () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }, []);
 
-  const togglePlay = () => {
+  const speak = () => {
     if (!("speechSynthesis" in window)) return;
-    if (isPlaying) {
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      return;
-    }
+    window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "fr-FR"; u.rate = rate; u.pitch = 1;
     u.volume = isMuted ? 0 : 1;
@@ -38,6 +36,40 @@ export const AudioPlayer = ({ text }: AudioPlayerProps) => {
     window.speechSynthesis.speak(u);
     setIsPlaying(true);
   };
+
+  const togglePlay = () => {
+    if (!("speechSynthesis" in window)) return;
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+    speak();
+  };
+
+  // Auto-play on mount; if blocked, start on first user interaction
+  useEffect(() => {
+    if (!autoPlay || startedRef.current) return;
+    startedRef.current = true;
+    const t = setTimeout(() => {
+      speak();
+      setTimeout(() => {
+        if (!window.speechSynthesis?.speaking) {
+          const trigger = () => {
+            speak();
+            window.removeEventListener("pointerdown", trigger);
+            window.removeEventListener("touchstart", trigger);
+            window.removeEventListener("keydown", trigger);
+          };
+          window.addEventListener("pointerdown", trigger, { once: true });
+          window.addEventListener("touchstart", trigger, { once: true });
+          window.addEventListener("keydown", trigger, { once: true });
+        }
+      }, 500);
+    }, 500);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPlay]);
 
   const toggleMute = () => {
     setIsMuted(m => !m);
