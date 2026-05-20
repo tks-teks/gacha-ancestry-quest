@@ -11,18 +11,12 @@ import { AnimatedDescription } from "@/components/AnimatedDescription";
 import { ParallaxImage } from "@/components/ParallaxImage";
 import { ImageGallery } from "@/components/ImageGallery";
 import { Guestbook } from "@/components/Guestbook";
-import { getHeritageObject, heritageObjects } from "@/data/heritageObjects";
+import { heritageObjects } from "@/data/heritageObjects";
+import { useHeritageObject, resolveImage } from "@/hooks/useHeritageObjects";
 import { getHeritageGallery } from "@/data/heritageGalleries";
 import { getObjectAnnotations } from "@/data/annotations3D";
 import { useCollection, BADGE_INFO } from "@/hooks/useCollection";
 import { toast } from "sonner";
-import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
-import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
-
-const imageMap: Record<string, string> = {
-  "case-obus-mousgoum": caseObusMousgoumImage,
-  "sculpture-recyclee": sculptureRecycleeImage,
-};
 
 const HeritageObject = () => {
   const { id } = useParams<{ id: string }>();
