@@ -16,6 +16,7 @@ export const AudioPlayer = ({ text, autoPlay = false }: AudioPlayerProps) => {
   const [rate, setRate] = useState<number>(1);
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
   const startedRef = useRef(false);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
   // Estimated duration (~150 words/min)
   const wordCount = text.trim().split(/\s+/).length;
@@ -23,15 +24,38 @@ export const AudioPlayer = ({ text, autoPlay = false }: AudioPlayerProps) => {
   const mm = Math.floor(estSeconds / 60).toString().padStart(2, "0");
   const ss = (estSeconds % 60).toString().padStart(2, "0");
 
-  useEffect(() => () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }, []);
+  // Load and pick best French voice (voices load async on some browsers)
+  useEffect(() => {
+    if (!("speechSynthesis" in window)) return;
+    const pickVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return false;
+      const french = voices.filter(v => v.lang?.toLowerCase().startsWith("fr"));
+      voiceRef.current =
+        french.find(v => /google.*(français|french)/i.test(v.name)) ||
+        french.find(v => /microsoft.*(denise|henri|julie|paul)/i.test(v.name)) ||
+        french.find(v => v.lang.toLowerCase() === "fr-fr") ||
+        french.find(v => v.localService) ||
+        french[0] ||
+        null;
+      return true;
+    };
+    if (!pickVoice()) {
+      window.speechSynthesis.onvoiceschanged = () => pickVoice();
+    }
+    return () => { window.speechSynthesis.cancel(); };
+  }, []);
 
   const speak = () => {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "fr-FR"; u.rate = rate; u.pitch = 1;
+    if (voiceRef.current) u.voice = voiceRef.current;
+    u.lang = voiceRef.current?.lang || "fr-FR";
+    u.rate = rate; u.pitch = 1;
     u.volume = isMuted ? 0 : 1;
     u.onend = () => setIsPlaying(false);
+    u.onerror = () => setIsPlaying(false);
     utterRef.current = u;
     window.speechSynthesis.speak(u);
     setIsPlaying(true);
