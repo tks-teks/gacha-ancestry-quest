@@ -21,7 +21,7 @@ import { toast } from "sonner";
 const HeritageObject = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const object = getHeritageObject(id || "");
+  const { object } = useHeritageObject(id);
   const galleryImages = getHeritageGallery(id || "");
   const annotations = getObjectAnnotations(id || "");
   const { discover } = useCollection(heritageObjects.length);
