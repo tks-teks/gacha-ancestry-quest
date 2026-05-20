@@ -6,18 +6,12 @@ import { QRScanner } from "@/components/QRScanner";
 import { Layout } from "@/components/Layout";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { heritageObjects } from "@/data/heritageObjects";
+import { heritageObjects as staticHeritageObjects } from "@/data/heritageObjects";
+import { useHeritageObjects, resolveImage } from "@/hooks/useHeritageObjects";
 import { useCollection, BADGE_INFO } from "@/hooks/useCollection";
 import { toast } from "sonner";
 import { ScrollReveal, StaggerReveal } from "@/hooks/useScrollAnimation";
 import heroImage from "@/assets/hero-fondation.jpg";
-import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
-import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
-
-const imageMap: Record<string, string> = {
-  "case-obus-mousgoum": caseObusMousgoumImage,
-  "sculpture-recyclee": sculptureRecycleeImage,
-};
 
 const RARITY = [
   { cls: "rarity-legendary", label: "Légendaire", symbol: "✦" },
