@@ -22,7 +22,8 @@ const RARITY = [
 const Index = () => {
   const navigate = useNavigate();
   const [showScanner, setShowScanner] = useState(false);
-  const { collection, registerScan } = useCollection(heritageObjects.length);
+  const { objects: heritageObjects } = useHeritageObjects();
+  const { collection, registerScan } = useCollection(Math.max(heritageObjects.length, staticHeritageObjects.length));
 
   // Handle deep-link ?action=scan (PWA shortcut)
   useEffect(() => {
