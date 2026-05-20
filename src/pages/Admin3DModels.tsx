@@ -527,6 +527,14 @@ function ModelEditor({
       xr_environment: row.xr_environment,
       initial_scale: row.initial_scale,
       annotations: row.annotations as any,
+      title: row.title || null,
+      subtitle: row.subtitle || null,
+      description: row.description || null,
+      audio_text: row.audio_text || null,
+      image_url: row.image_url || null,
+      ancestor_name: row.ancestor_name || null,
+      ancestor_greeting: row.ancestor_greeting || null,
+      extended_knowledge: row.extended_knowledge || {},
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase
