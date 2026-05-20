@@ -184,6 +184,14 @@ export default function Admin3DModels() {
       seed.model_glb_url = obj?.model3dUrl || "";
       seed.model_usdz_url = obj?.iosModelUrl || "";
       seed.annotations = anns;
+      seed.title = obj?.title || "";
+      seed.subtitle = obj?.subtitle || "";
+      seed.description = obj?.description || "";
+      seed.audio_text = obj?.audioText || "";
+      seed.image_url = obj?.image || "";
+      seed.ancestor_name = obj?.ancestorName || "";
+      seed.ancestor_greeting = obj?.ancestorGreeting || "";
+      seed.extended_knowledge = (obj?.extendedKnowledge as ExtendedKnowledge) || {};
       setEditing(seed);
     }
   };
