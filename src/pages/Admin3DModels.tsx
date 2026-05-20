@@ -684,6 +684,125 @@ function ModelEditor({
           </div>
         </div>
 
+        {/* Editorial content (everything visible on the object page) */}
+        <Accordion type="single" collapsible defaultValue="content">
+          <AccordionItem value="content">
+            <AccordionTrigger>Contenu de la fiche patrimoine</AccordionTrigger>
+            <AccordionContent className="space-y-3 pt-2">
+              <div>
+                <Label>Titre</Label>
+                <Input
+                  value={row.title}
+                  onChange={(e) => update({ title: e.target.value })}
+                  placeholder="Ex : Masque royal Bamiléké"
+                  maxLength={120}
+                />
+              </div>
+              <div>
+                <Label>Sous-titre</Label>
+                <Input
+                  value={row.subtitle}
+                  onChange={(e) => update({ subtitle: e.target.value })}
+                  placeholder="Ex : Art royal, Ouest Cameroun"
+                  maxLength={160}
+                />
+              </div>
+              <div>
+                <Label>Image de couverture (URL)</Label>
+                <Input
+                  value={row.image_url}
+                  onChange={(e) => update({ image_url: e.target.value })}
+                  placeholder="https://… ou /assets/mon-image.jpg"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  URL publique d'une image (jpg/png/webp).
+                </p>
+              </div>
+              <div>
+                <Label>Description longue</Label>
+                <Textarea
+                  value={row.description}
+                  onChange={(e) => update({ description: e.target.value })}
+                  rows={5}
+                  placeholder="Histoire, contexte, importance culturelle…"
+                  maxLength={4000}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {row.description.length} / 4000 caractères
+                </p>
+              </div>
+              <div>
+                <Label>Texte de narration audio</Label>
+                <Textarea
+                  value={row.audio_text}
+                  onChange={(e) => update({ audio_text: e.target.value })}
+                  rows={4}
+                  placeholder="Texte lu à voix haute (1ère personne, voix de l'ancêtre)…"
+                  maxLength={3000}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {row.audio_text.length} / 3000 caractères
+                </p>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Nom de l'ancêtre</Label>
+                  <Input
+                    value={row.ancestor_name}
+                    onChange={(e) => update({ ancestor_name: e.target.value })}
+                    placeholder="Ex : Esprit du Masque"
+                    maxLength={80}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Salutation de l'ancêtre (chatbot)</Label>
+                <Textarea
+                  value={row.ancestor_greeting}
+                  onChange={(e) => update({ ancestor_greeting: e.target.value })}
+                  rows={2}
+                  placeholder="Premier message affiché par l'ancêtre IA…"
+                  maxLength={500}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="knowledge">
+            <AccordionTrigger>Connaissances étendues (chatbot IA)</AccordionTrigger>
+            <AccordionContent className="space-y-3 pt-2">
+              <p className="text-xs text-muted-foreground">
+                Ces textes nourrissent les réponses du chatbot ancestral.
+              </p>
+              {([
+                ["history", "Histoire"],
+                ["techniques", "Techniques & savoir-faire"],
+                ["culturalSignificance", "Signification culturelle"],
+                ["dailyLife", "Vie quotidienne"],
+                ["spirituality", "Spiritualité"],
+                ["preservation", "Préservation"],
+              ] as const).map(([key, label]) => (
+                <div key={key}>
+                  <Label>{label}</Label>
+                  <Textarea
+                    value={row.extended_knowledge?.[key] || ""}
+                    onChange={(e) =>
+                      update({
+                        extended_knowledge: {
+                          ...row.extended_knowledge,
+                          [key]: e.target.value,
+                        },
+                      })
+                    }
+                    rows={3}
+                    maxLength={4000}
+                  />
+                </div>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
         {/* Type */}
         <div>
           <Label>Type de modèle</Label>
