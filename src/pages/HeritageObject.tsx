@@ -61,7 +61,7 @@ const HeritageObject = () => {
       {/* Hero Image with Parallax - Optimized for mobile */}
       <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
         <ParallaxImage
-          src={imageMap[object.image]}
+          src={resolveImage(object.image)}
           alt={object.title}
           className="h-full"
         />
@@ -153,7 +153,7 @@ const HeritageObject = () => {
             <Object3DViewer
               modelUrl={object.model3dUrl}
               iosModelUrl={object.iosModelUrl}
-              posterUrl={imageMap[object.image]}
+              posterUrl={resolveImage(object.image)}
               alt={object.title}
               showARButton={true}
               annotations={annotations}
