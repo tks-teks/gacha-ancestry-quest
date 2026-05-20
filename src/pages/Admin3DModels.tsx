@@ -141,7 +141,19 @@ export default function Admin3DModels() {
     }
     const map: Record<string, HeritageModelRow> = {};
     (data || []).forEach((r: any) => {
-      map[r.object_id] = { ...r, annotations: r.annotations || [] };
+      map[r.object_id] = {
+        ...DEFAULT_ROW(r.object_id),
+        ...r,
+        annotations: r.annotations || [],
+        title: r.title || "",
+        subtitle: r.subtitle || "",
+        description: r.description || "",
+        audio_text: r.audio_text || "",
+        image_url: r.image_url || "",
+        ancestor_name: r.ancestor_name || "",
+        ancestor_greeting: r.ancestor_greeting || "",
+        extended_knowledge: r.extended_knowledge || {},
+      };
     });
     setRows(map);
     setLoading(false);
