@@ -206,7 +206,7 @@ const Index = () => {
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
-                      src={imageMap[object.image]}
+                      src={resolveImage(object.image)}
                       alt={object.title}
                       loading="lazy"
                       decoding="async"
