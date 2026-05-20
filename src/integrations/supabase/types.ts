@@ -43,11 +43,17 @@ export type Database = {
       }
       heritage_models: {
         Row: {
+          ancestor_greeting: string | null
+          ancestor_name: string | null
           annotations: Json | null
           ar_placement: string | null
           ar_scale: string | null
+          audio_text: string | null
+          description: string | null
           exposure: number | null
+          extended_knowledge: Json | null
           id: string
+          image_url: string | null
           initial_scale: number | null
           interpolation_decay: number | null
           model_glb_url: string | null
@@ -56,15 +62,23 @@ export type Database = {
           shadow_intensity: number | null
           shadow_softness: number | null
           source_type: string | null
+          subtitle: string | null
+          title: string | null
           updated_at: string | null
           xr_environment: boolean | null
         }
         Insert: {
+          ancestor_greeting?: string | null
+          ancestor_name?: string | null
           annotations?: Json | null
           ar_placement?: string | null
           ar_scale?: string | null
+          audio_text?: string | null
+          description?: string | null
           exposure?: number | null
+          extended_knowledge?: Json | null
           id?: string
+          image_url?: string | null
           initial_scale?: number | null
           interpolation_decay?: number | null
           model_glb_url?: string | null
@@ -73,15 +87,23 @@ export type Database = {
           shadow_intensity?: number | null
           shadow_softness?: number | null
           source_type?: string | null
+          subtitle?: string | null
+          title?: string | null
           updated_at?: string | null
           xr_environment?: boolean | null
         }
         Update: {
+          ancestor_greeting?: string | null
+          ancestor_name?: string | null
           annotations?: Json | null
           ar_placement?: string | null
           ar_scale?: string | null
+          audio_text?: string | null
+          description?: string | null
           exposure?: number | null
+          extended_knowledge?: Json | null
           id?: string
+          image_url?: string | null
           initial_scale?: number | null
           interpolation_decay?: number | null
           model_glb_url?: string | null
@@ -90,6 +112,8 @@ export type Database = {
           shadow_intensity?: number | null
           shadow_softness?: number | null
           source_type?: string | null
+          subtitle?: string | null
+          title?: string | null
           updated_at?: string | null
           xr_environment?: boolean | null
         }
