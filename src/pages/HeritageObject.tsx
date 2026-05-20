@@ -11,23 +11,17 @@ import { AnimatedDescription } from "@/components/AnimatedDescription";
 import { ParallaxImage } from "@/components/ParallaxImage";
 import { ImageGallery } from "@/components/ImageGallery";
 import { Guestbook } from "@/components/Guestbook";
-import { getHeritageObject, heritageObjects } from "@/data/heritageObjects";
+import { heritageObjects } from "@/data/heritageObjects";
+import { useHeritageObject, resolveImage } from "@/hooks/useHeritageObjects";
 import { getHeritageGallery } from "@/data/heritageGalleries";
 import { getObjectAnnotations } from "@/data/annotations3D";
 import { useCollection, BADGE_INFO } from "@/hooks/useCollection";
 import { toast } from "sonner";
-import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
-import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
-
-const imageMap: Record<string, string> = {
-  "case-obus-mousgoum": caseObusMousgoumImage,
-  "sculpture-recyclee": sculptureRecycleeImage,
-};
 
 const HeritageObject = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const object = getHeritageObject(id || "");
+  const { object } = useHeritageObject(id);
   const galleryImages = getHeritageGallery(id || "");
   const annotations = getObjectAnnotations(id || "");
   const { discover } = useCollection(heritageObjects.length);
@@ -67,7 +61,7 @@ const HeritageObject = () => {
       {/* Hero Image with Parallax - Optimized for mobile */}
       <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
         <ParallaxImage
-          src={imageMap[object.image]}
+          src={resolveImage(object.image)}
           alt={object.title}
           className="h-full"
         />
@@ -159,7 +153,7 @@ const HeritageObject = () => {
             <Object3DViewer
               modelUrl={object.model3dUrl}
               iosModelUrl={object.iosModelUrl}
-              posterUrl={imageMap[object.image]}
+              posterUrl={resolveImage(object.image)}
               alt={object.title}
               showARButton={true}
               annotations={annotations}

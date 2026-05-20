@@ -59,6 +59,15 @@ import { objectAnnotations, type Annotation3D } from "@/data/annotations3D";
 import { extractSketchfabUrl } from "@/lib/sketchfab";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ExtendedKnowledge {
+  history?: string;
+  techniques?: string;
+  culturalSignificance?: string;
+  dailyLife?: string;
+  spirituality?: string;
+  preservation?: string;
+}
+
 interface HeritageModelRow {
   id?: string;
   object_id: string;
@@ -74,6 +83,15 @@ interface HeritageModelRow {
   xr_environment: boolean;
   initial_scale: number;
   annotations: Annotation3D[];
+  // Editorial content
+  title: string;
+  subtitle: string;
+  description: string;
+  audio_text: string;
+  image_url: string;
+  ancestor_name: string;
+  ancestor_greeting: string;
+  extended_knowledge: ExtendedKnowledge;
 }
 
 const DEFAULT_ROW = (objectId: string): HeritageModelRow => ({
@@ -90,6 +108,14 @@ const DEFAULT_ROW = (objectId: string): HeritageModelRow => ({
   xr_environment: true,
   initial_scale: 1.0,
   annotations: [],
+  title: "",
+  subtitle: "",
+  description: "",
+  audio_text: "",
+  image_url: "",
+  ancestor_name: "",
+  ancestor_greeting: "",
+  extended_knowledge: {},
 });
 
 const truncate = (s?: string | null, n = 40) =>
@@ -115,7 +141,19 @@ export default function Admin3DModels() {
     }
     const map: Record<string, HeritageModelRow> = {};
     (data || []).forEach((r: any) => {
-      map[r.object_id] = { ...r, annotations: r.annotations || [] };
+      map[r.object_id] = {
+        ...DEFAULT_ROW(r.object_id),
+        ...r,
+        annotations: r.annotations || [],
+        title: r.title || "",
+        subtitle: r.subtitle || "",
+        description: r.description || "",
+        audio_text: r.audio_text || "",
+        image_url: r.image_url || "",
+        ancestor_name: r.ancestor_name || "",
+        ancestor_greeting: r.ancestor_greeting || "",
+        extended_knowledge: r.extended_knowledge || {},
+      };
     });
     setRows(map);
     setLoading(false);
@@ -146,6 +184,14 @@ export default function Admin3DModels() {
       seed.model_glb_url = obj?.model3dUrl || "";
       seed.model_usdz_url = obj?.iosModelUrl || "";
       seed.annotations = anns;
+      seed.title = obj?.title || "";
+      seed.subtitle = obj?.subtitle || "";
+      seed.description = obj?.description || "";
+      seed.audio_text = obj?.audioText || "";
+      seed.image_url = obj?.image || "";
+      seed.ancestor_name = obj?.ancestorName || "";
+      seed.ancestor_greeting = obj?.ancestorGreeting || "";
+      seed.extended_knowledge = (obj?.extendedKnowledge as ExtendedKnowledge) || {};
       setEditing(seed);
     }
   };
@@ -481,6 +527,14 @@ function ModelEditor({
       xr_environment: row.xr_environment,
       initial_scale: row.initial_scale,
       annotations: row.annotations as any,
+      title: row.title || null,
+      subtitle: row.subtitle || null,
+      description: row.description || null,
+      audio_text: row.audio_text || null,
+      image_url: row.image_url || null,
+      ancestor_name: row.ancestor_name || null,
+      ancestor_greeting: row.ancestor_greeting || null,
+      extended_knowledge: row.extended_knowledge || {},
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase
@@ -629,6 +683,125 @@ function ModelEditor({
             </div>
           </div>
         </div>
+
+        {/* Editorial content (everything visible on the object page) */}
+        <Accordion type="single" collapsible defaultValue="content">
+          <AccordionItem value="content">
+            <AccordionTrigger>Contenu de la fiche patrimoine</AccordionTrigger>
+            <AccordionContent className="space-y-3 pt-2">
+              <div>
+                <Label>Titre</Label>
+                <Input
+                  value={row.title}
+                  onChange={(e) => update({ title: e.target.value })}
+                  placeholder="Ex : Masque royal Bamiléké"
+                  maxLength={120}
+                />
+              </div>
+              <div>
+                <Label>Sous-titre</Label>
+                <Input
+                  value={row.subtitle}
+                  onChange={(e) => update({ subtitle: e.target.value })}
+                  placeholder="Ex : Art royal, Ouest Cameroun"
+                  maxLength={160}
+                />
+              </div>
+              <div>
+                <Label>Image de couverture (URL)</Label>
+                <Input
+                  value={row.image_url}
+                  onChange={(e) => update({ image_url: e.target.value })}
+                  placeholder="https://… ou /assets/mon-image.jpg"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  URL publique d'une image (jpg/png/webp).
+                </p>
+              </div>
+              <div>
+                <Label>Description longue</Label>
+                <Textarea
+                  value={row.description}
+                  onChange={(e) => update({ description: e.target.value })}
+                  rows={5}
+                  placeholder="Histoire, contexte, importance culturelle…"
+                  maxLength={4000}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {row.description.length} / 4000 caractères
+                </p>
+              </div>
+              <div>
+                <Label>Texte de narration audio</Label>
+                <Textarea
+                  value={row.audio_text}
+                  onChange={(e) => update({ audio_text: e.target.value })}
+                  rows={4}
+                  placeholder="Texte lu à voix haute (1ère personne, voix de l'ancêtre)…"
+                  maxLength={3000}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {row.audio_text.length} / 3000 caractères
+                </p>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Nom de l'ancêtre</Label>
+                  <Input
+                    value={row.ancestor_name}
+                    onChange={(e) => update({ ancestor_name: e.target.value })}
+                    placeholder="Ex : Esprit du Masque"
+                    maxLength={80}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Salutation de l'ancêtre (chatbot)</Label>
+                <Textarea
+                  value={row.ancestor_greeting}
+                  onChange={(e) => update({ ancestor_greeting: e.target.value })}
+                  rows={2}
+                  placeholder="Premier message affiché par l'ancêtre IA…"
+                  maxLength={500}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="knowledge">
+            <AccordionTrigger>Connaissances étendues (chatbot IA)</AccordionTrigger>
+            <AccordionContent className="space-y-3 pt-2">
+              <p className="text-xs text-muted-foreground">
+                Ces textes nourrissent les réponses du chatbot ancestral.
+              </p>
+              {([
+                ["history", "Histoire"],
+                ["techniques", "Techniques & savoir-faire"],
+                ["culturalSignificance", "Signification culturelle"],
+                ["dailyLife", "Vie quotidienne"],
+                ["spirituality", "Spiritualité"],
+                ["preservation", "Préservation"],
+              ] as const).map(([key, label]) => (
+                <div key={key}>
+                  <Label>{label}</Label>
+                  <Textarea
+                    value={row.extended_knowledge?.[key] || ""}
+                    onChange={(e) =>
+                      update({
+                        extended_knowledge: {
+                          ...row.extended_knowledge,
+                          [key]: e.target.value,
+                        },
+                      })
+                    }
+                    rows={3}
+                    maxLength={4000}
+                  />
+                </div>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
         {/* Type */}
         <div>

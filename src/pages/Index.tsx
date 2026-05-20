@@ -6,18 +6,12 @@ import { QRScanner } from "@/components/QRScanner";
 import { Layout } from "@/components/Layout";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { heritageObjects } from "@/data/heritageObjects";
+import { heritageObjects as staticHeritageObjects } from "@/data/heritageObjects";
+import { useHeritageObjects, resolveImage } from "@/hooks/useHeritageObjects";
 import { useCollection, BADGE_INFO } from "@/hooks/useCollection";
 import { toast } from "sonner";
 import { ScrollReveal, StaggerReveal } from "@/hooks/useScrollAnimation";
 import heroImage from "@/assets/hero-fondation.jpg";
-import caseObusMousgoumImage from "@/assets/case-obus-mousgoum.jpg";
-import sculptureRecycleeImage from "@/assets/sculpture-recyclee.jpg";
-
-const imageMap: Record<string, string> = {
-  "case-obus-mousgoum": caseObusMousgoumImage,
-  "sculpture-recyclee": sculptureRecycleeImage,
-};
 
 const RARITY = [
   { cls: "rarity-legendary", label: "Légendaire", symbol: "✦" },
@@ -28,7 +22,8 @@ const RARITY = [
 const Index = () => {
   const navigate = useNavigate();
   const [showScanner, setShowScanner] = useState(false);
-  const { collection, registerScan } = useCollection(heritageObjects.length);
+  const { objects: heritageObjects } = useHeritageObjects();
+  const { collection, registerScan } = useCollection(Math.max(heritageObjects.length, staticHeritageObjects.length));
 
   // Handle deep-link ?action=scan (PWA shortcut)
   useEffect(() => {
@@ -211,7 +206,7 @@ const Index = () => {
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
-                      src={imageMap[object.image]}
+                      src={resolveImage(object.image)}
                       alt={object.title}
                       loading="lazy"
                       decoding="async"
