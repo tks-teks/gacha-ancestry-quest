@@ -59,6 +59,15 @@ import { objectAnnotations, type Annotation3D } from "@/data/annotations3D";
 import { extractSketchfabUrl } from "@/lib/sketchfab";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ExtendedKnowledge {
+  history?: string;
+  techniques?: string;
+  culturalSignificance?: string;
+  dailyLife?: string;
+  spirituality?: string;
+  preservation?: string;
+}
+
 interface HeritageModelRow {
   id?: string;
   object_id: string;
@@ -74,6 +83,15 @@ interface HeritageModelRow {
   xr_environment: boolean;
   initial_scale: number;
   annotations: Annotation3D[];
+  // Editorial content
+  title: string;
+  subtitle: string;
+  description: string;
+  audio_text: string;
+  image_url: string;
+  ancestor_name: string;
+  ancestor_greeting: string;
+  extended_knowledge: ExtendedKnowledge;
 }
 
 const DEFAULT_ROW = (objectId: string): HeritageModelRow => ({
@@ -90,6 +108,14 @@ const DEFAULT_ROW = (objectId: string): HeritageModelRow => ({
   xr_environment: true,
   initial_scale: 1.0,
   annotations: [],
+  title: "",
+  subtitle: "",
+  description: "",
+  audio_text: "",
+  image_url: "",
+  ancestor_name: "",
+  ancestor_greeting: "",
+  extended_knowledge: {},
 });
 
 const truncate = (s?: string | null, n = 40) =>
